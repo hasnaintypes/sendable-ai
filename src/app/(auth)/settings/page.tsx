@@ -10,8 +10,8 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { useState } from "react";
-import { authClient } from "@/lib/auth-client";
-import EnableTwoFactor from "@/app/(auth)/settings/EnableTwoFactor";
+import { authClient } from "@/lib/auth/client";
+import EnableTwoFactor from "./EnableTwoFactor";
 import { ArrowLeft, AlertTriangle } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState, useEffect } from "react";
 import { Loader2, Copy, Check, ArrowLeft } from "lucide-react";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/client";
 import QRCode from "react-qr-code";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
@@ -25,7 +25,7 @@ type SetupStep =
   | "backup";
 
 export default function EnableTwoFactor() {
-  const user = useQuery(api.auth.getCurrentUser);
+  const user = useQuery(api.auth.queries.getCurrentUser);
   const [step, setStep] = useState<SetupStep>("loading");
   const [password, setPassword] = useState("");
   const [code, setCode] = useState("");
