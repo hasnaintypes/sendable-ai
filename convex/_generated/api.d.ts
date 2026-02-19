@@ -8,15 +8,18 @@
  * @module
  */
 
-import type * as auth from "../auth.js";
-import type * as email from "../email.js";
+import type * as auth_helpers from "../auth/helpers.js";
+import type * as auth_mutations from "../auth/mutations.js";
+import type * as auth_queries from "../auth/queries.js";
 import type * as emails_components_BaseEmail from "../emails/components/BaseEmail.js";
+import type * as emails_email from "../emails/email.js";
 import type * as emails_magicLink from "../emails/magicLink.js";
 import type * as emails_resetPassword from "../emails/resetPassword.js";
 import type * as emails_verifyEmail from "../emails/verifyEmail.js";
 import type * as emails_verifyOTP from "../emails/verifyOTP.js";
 import type * as http from "../http.js";
-import type * as todos from "../todos.js";
+import type * as todos_mutations from "../todos/mutations.js";
+import type * as todos_queries from "../todos/queries.js";
 
 import type {
   ApiFromModules,
@@ -25,15 +28,18 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
-  auth: typeof auth;
-  email: typeof email;
+  "auth/helpers": typeof auth_helpers;
+  "auth/mutations": typeof auth_mutations;
+  "auth/queries": typeof auth_queries;
   "emails/components/BaseEmail": typeof emails_components_BaseEmail;
+  "emails/email": typeof emails_email;
   "emails/magicLink": typeof emails_magicLink;
   "emails/resetPassword": typeof emails_resetPassword;
   "emails/verifyEmail": typeof emails_verifyEmail;
   "emails/verifyOTP": typeof emails_verifyOTP;
   http: typeof http;
-  todos: typeof todos;
+  "todos/mutations": typeof todos_mutations;
+  "todos/queries": typeof todos_queries;
 }>;
 
 /**
