@@ -1,4 +1,4 @@
-import TwoFactorVerification from "@/app/(unauth)/verify-2fa/TwoFactorVerification";
+import TwoFactorVerification from "@/components/auth/TwoFactorVerification";
 
 export default function VerifyTwoFactorPage() {
   return (

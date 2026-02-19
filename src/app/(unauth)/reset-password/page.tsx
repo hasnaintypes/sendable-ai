@@ -1,14 +1,14 @@
 import { Suspense } from "react";
-import ClientResetPassword from "./reset-password";
+import ResetPassword from "../../../components/auth/ResetPassword";
 
-export default function ResetPassword({
+export default function ResetPasswordPage({
   searchParams,
 }: {
   searchParams: Promise<{ token: string }>;
 }) {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <ClientResetPassword searchParams={searchParams} />
+      <ResetPassword searchParams={searchParams} />
     </Suspense>
   );
 }
