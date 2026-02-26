@@ -60,10 +60,6 @@ jobs:
 
       - name: Build Next.js
         run: npm run build
-        env:
-          NEXT_PUBLIC_CONVEX_URL: ${{ secrets.NEXT_PUBLIC_CONVEX_URL }}
-          BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
-          SITE_URL: https://localhost:3000
 
   check-formatting:
     name: Check Formatting

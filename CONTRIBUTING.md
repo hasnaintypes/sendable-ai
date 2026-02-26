@@ -38,7 +38,7 @@ This project and everyone participating in it is governed by our commitment to f
 
 Before you begin, ensure you have:
 - Node.js (v20.x or higher)
-- npm (v9.x or higher)
+- pnpm (v9.x or higher)
 - Git
 - A Convex account ([Sign up free](https://convex.dev))
 - A code editor (VS Code recommended)
@@ -52,18 +52,18 @@ Before you begin, ensure you have:
 
 2. **Clone Your Fork**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/sendable-ai.git
+   git clone https://github.com/hasnaintypes/sendable-ai.git
    cd sendable-ai
    ```
 
 3. **Add Upstream Remote**
    ```bash
-   git remote add upstream https://github.com/ORIGINAL_OWNER/sendable-ai.git
+   git remote add upstream https://github.com/hasnaintypes/sendable-ai.git
    ```
 
 4. **Install Dependencies**
    ```bash
-   npm install
+   pnpm install
    ```
 
 5. **Set Up Environment Variables**
@@ -79,7 +79,7 @@ Before you begin, ensure you have:
 
 7. **Start Development Server**
    ```bash
-   npm run dev
+   pnpm run dev
    ```
 
 ---
@@ -361,8 +361,8 @@ Closes #123"
 1. **Update your branch** with the latest main
 2. **Run all checks** locally:
    ```bash
-   npm run lint
-   npm run build
+   pnpm run lint
+   pnpm run build
    # Run type checking
    npx tsc --noEmit
    ```
@@ -458,13 +458,13 @@ Closes #123
 
 ```bash
 # Run all tests
-npm test
+pnpm test
 
 # Watch mode
-npm test -- --watch
+pnpm test -- --watch
 
 # Coverage
-npm test -- --coverage
+pnpm test -- --coverage
 ```
 
 ### Writing Tests
