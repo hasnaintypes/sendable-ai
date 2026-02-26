@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { ArrowRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
+import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function NotFound() {
   return (
@@ -18,7 +18,9 @@ export default function NotFound() {
           transition={{ duration: 0.6 }}
           className="mb-8"
         >
-          <h1 className="text-7xl sm:text-8xl font-bold text-zinc-800 mb-4">404</h1>
+          <h1 className="text-7xl sm:text-8xl font-bold text-zinc-800 mb-4">
+            404
+          </h1>
         </motion.div>
 
         <motion.div
@@ -27,9 +29,12 @@ export default function NotFound() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="mb-6"
         >
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Page Not Found</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+            Page Not Found
+          </h2>
           <p className="text-lg text-zinc-400">
-            Looks like this page took a wrong turn. Don't worry, let's get you back on track.
+            Looks like this page took a wrong turn. Don't worry, let's get you
+            back on track.
           </p>
         </motion.div>
 
@@ -40,7 +45,10 @@ export default function NotFound() {
           className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10"
         >
           <Link href="/">
-            <Button size="lg" className="shimmer-btn bg-white text-zinc-950 hover:bg-zinc-200 rounded-full px-8 h-12 text-base font-medium shadow-lg shadow-white/10">
+            <Button
+              size="lg"
+              className="shimmer-btn bg-white text-zinc-950 hover:bg-zinc-200 rounded-full px-8 h-12 text-base font-medium shadow-lg shadow-white/10"
+            >
               Back to Home
               <ArrowRight className="ml-2 w-4 h-4" />
             </Button>
@@ -62,26 +70,34 @@ export default function NotFound() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="mt-16 pt-8 border-t border-zinc-800"
         >
-          <p className="text-sm text-zinc-500 mb-6">Need help? Let's get you back on track</p>
+          <p className="text-sm text-zinc-500 mb-6">
+            Need help? Let's get you back on track
+          </p>
           <div className="grid grid-cols-3 gap-4">
             <Link href="/" className="group">
               <div className="p-4 rounded-lg bg-zinc-900/50 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 transition-all">
-                <div className="text-sm font-semibold text-white group-hover:text-primary transition-colors">Home</div>
+                <div className="text-sm font-semibold text-white group-hover:text-primary transition-colors">
+                  Home
+                </div>
               </div>
             </Link>
             <Link href="/#features" className="group">
               <div className="p-4 rounded-lg bg-zinc-900/50 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 transition-all">
-                <div className="text-sm font-semibold text-white group-hover:text-primary transition-colors">Features</div>
+                <div className="text-sm font-semibold text-white group-hover:text-primary transition-colors">
+                  Features
+                </div>
               </div>
             </Link>
             <Link href="/#pricing" className="group">
               <div className="p-4 rounded-lg bg-zinc-900/50 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 transition-all">
-                <div className="text-sm font-semibold text-white group-hover:text-primary transition-colors">Pricing</div>
+                <div className="text-sm font-semibold text-white group-hover:text-primary transition-colors">
+                  Pricing
+                </div>
               </div>
             </Link>
           </div>
         </motion.div>
       </div>
     </div>
-  )
+  );
 }

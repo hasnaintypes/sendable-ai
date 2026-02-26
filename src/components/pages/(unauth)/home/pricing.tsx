@@ -1,16 +1,22 @@
-"use client"
+"use client";
 
-import { motion, useInView } from "framer-motion"
-import { useRef, useState } from "react"
-import { Check } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { motion, useInView } from "framer-motion";
+import { useRef, useState } from "react";
+import { Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const plans = [
   {
     name: "Starter",
     description: "Perfect for individuals and solo professionals",
     price: { monthly: 0, yearly: 0 },
-    features: ["50 emails per month", "Basic AI generation", "2 connected inboxes", "Email templates", "Community support"],
+    features: [
+      "50 emails per month",
+      "Basic AI generation",
+      "2 connected inboxes",
+      "Email templates",
+      "Community support",
+    ],
     cta: "Get Started Free",
     highlighted: false,
   },
@@ -48,7 +54,7 @@ const plans = [
     cta: "Contact Sales",
     highlighted: false,
   },
-]
+];
 
 function BorderBeam() {
   return (
@@ -60,13 +66,15 @@ function BorderBeam() {
         }}
       />
     </div>
-  )
+  );
 }
 
 export function Pricing() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
-  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly")
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">(
+    "monthly",
+  );
 
   return (
     <section id="pricing" className="py-24 px-4">
@@ -84,7 +92,8 @@ export function Pricing() {
             Simple, transparent pricing
           </h2>
           <p className="text-zinc-400 max-w-2xl mx-auto mb-8">
-            Start free with 50 emails per month. Scale as you grow. No hidden fees.
+            Start free with 50 emails per month. Scale as you grow. No hidden
+            fees.
           </p>
 
           {/* Billing Toggle */}
@@ -153,24 +162,38 @@ export function Pricing() {
               )}
 
               <div className="mb-6">
-                <h3 className="text-xl font-semibold text-white mb-2">{plan.name}</h3>
+                <h3 className="text-xl font-semibold text-white mb-2">
+                  {plan.name}
+                </h3>
                 <p className="text-zinc-400 text-sm">{plan.description}</p>
               </div>
 
               <div className="mb-6">
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-bold text-white">${plan.price[billingCycle]}</span>
-                  {plan.price.monthly > 0 && <span className="text-zinc-400 text-sm">/month</span>}
+                  <span className="text-4xl font-bold text-white">
+                    ${plan.price[billingCycle]}
+                  </span>
+                  {plan.price.monthly > 0 && (
+                    <span className="text-zinc-400 text-sm">/month</span>
+                  )}
                 </div>
                 {billingCycle === "yearly" && plan.price.yearly > 0 && (
-                  <p className="text-xs text-zinc-500 mt-1">Billed annually (${plan.price.yearly * 12}/year)</p>
+                  <p className="text-xs text-zinc-500 mt-1">
+                    Billed annually (${plan.price.yearly * 12}/year)
+                  </p>
                 )}
               </div>
 
               <ul className="space-y-3 mb-8">
                 {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-center gap-3 text-sm text-zinc-300">
-                    <Check className="w-4 h-4 text-emerald-500 shrink-0" strokeWidth={1.5} />
+                  <li
+                    key={feature}
+                    className="flex items-center gap-3 text-sm text-zinc-300"
+                  >
+                    <Check
+                      className="w-4 h-4 text-emerald-500 shrink-0"
+                      strokeWidth={1.5}
+                    />
                     {feature}
                   </li>
                 ))}
@@ -190,5 +213,5 @@ export function Pricing() {
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

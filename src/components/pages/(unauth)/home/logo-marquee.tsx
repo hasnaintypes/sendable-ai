@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { motion, useInView } from "framer-motion"
-import { useRef } from "react"
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 
 const logos = [
   { name: "Vercel", width: 100 },
@@ -12,11 +12,11 @@ const logos = [
   { name: "Slack", width: 90 },
   { name: "Discord", width: 100 },
   { name: "GitHub", width: 90 },
-]
+];
 
 export function LogoMarquee() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
     <section ref={ref} className="py-16 overflow-hidden">
@@ -26,7 +26,9 @@ export function LogoMarquee() {
         transition={{ duration: 0.6 }}
         className="text-center mb-10"
       >
-        <p className="text-sm text-zinc-500 uppercase tracking-wider font-medium">Trusted by industry leaders</p>
+        <p className="text-sm text-zinc-500 uppercase tracking-wider font-medium">
+          Trusted by industry leaders
+        </p>
       </motion.div>
 
       <div className="relative">
@@ -45,7 +47,10 @@ export function LogoMarquee() {
                 <div className="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center">
                   <span className="text-xs font-bold">{logo.name[0]}</span>
                 </div>
-                <span className="font-medium" style={{ fontFamily: "var(--font-instrument-sans)" }}>
+                <span
+                  className="font-medium"
+                  style={{ fontFamily: "var(--font-instrument-sans)" }}
+                >
                   {logo.name}
                 </span>
               </div>
@@ -54,5 +59,5 @@ export function LogoMarquee() {
         </div>
       </div>
     </section>
-  )
+  );
 }

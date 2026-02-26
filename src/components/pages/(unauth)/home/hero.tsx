@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { motion, Variants } from "framer-motion"
-import { ArrowRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { motion, Variants } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const avatars = [
   "https://img.freepik.com/free-photo/confident-cheerful-young-businesswoman_1262-20881.jpg?semt=ais_user_personalization&w=740&q=80",
@@ -10,7 +10,7 @@ const avatars = [
   "https://img.freepik.com/photos-premium/portrait-femme-noire-bras-croises-avocat-dans-cabinet-avocats-pour-commerce-avocate-confiance-lieu-travail-bureau-moderne-heureux-conseiller-juridique-carriere-pour-consultant-croissance-pour-avocan_590464-363232.jpg?semt=ais_hybrid&w=740&q=80",
   "https://img.freepik.com/free-photo/confident-cheerful-young-businesswoman_1262-20881.jpg?semt=ais_user_personalization&w=740&q=80sss",
   "https://img.freepik.com/photos-premium/portrait-femme-noire-bras-croises-avocat-dans-cabinet-avocats-pour-commerce-avocate-confiance-lieu-travail-bureau-moderne-heureux-conseiller-juridique-carriere-pour-consultant-croissance-pour-avocan_590464-363232.jpg?semt=ais_hybrid&w=740&q=80",
-]
+];
 
 const textRevealVariants: Variants = {
   hidden: { y: "100%" },
@@ -22,7 +22,7 @@ const textRevealVariants: Variants = {
       delay: i * 0.1,
     },
   }),
-}
+};
 
 export function Hero() {
   return (
@@ -42,7 +42,9 @@ export function Hero() {
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-900 border border-zinc-800 mb-8"
         >
           <span className="w-2 h-2 rounded-full bg-emerald-500 pulse-glow" />
-          <span className="text-sm text-zinc-400">AI-Powered Email Outreach</span>
+          <span className="text-sm text-zinc-400">
+            AI-Powered Email Outreach
+          </span>
         </motion.div>
 
         {/* Headline with text mask animation */}
@@ -51,7 +53,13 @@ export function Hero() {
           style={{ fontFamily: "var(--font-manrope), sans-serif" }}
         >
           <span className="block overflow-hidden">
-            <motion.span className="block" variants={textRevealVariants} initial="hidden" animate="visible" custom={0}>
+            <motion.span
+              className="block"
+              variants={textRevealVariants}
+              initial="hidden"
+              animate="visible"
+              custom={0}
+            >
               Cold emails.
             </motion.span>
           </span>
@@ -75,7 +83,9 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.5 }}
           className="text-lg sm:text-xl text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed"
         >
-          Generate hyper-personalized outreach emails with AI. Automate audience research, intent-based generation, and follow-ups for sales, recruiting, and networking.
+          Generate hyper-personalized outreach emails with AI. Automate audience
+          research, intent-based generation, and follow-ups for sales,
+          recruiting, and networking.
         </motion.p>
 
         {/* CTAs */}
@@ -126,10 +136,11 @@ export function Hero() {
             ))}
           </div>
           <p className="text-sm text-zinc-500">
-            Trusted by <span className="text-zinc-300 font-medium">500+</span> sales teams & recruiters
+            Trusted by <span className="text-zinc-300 font-medium">500+</span>{" "}
+            sales teams & recruiters
           </p>
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

@@ -1,51 +1,54 @@
-"use client"
+"use client";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Field,
   FieldDescription,
   FieldGroup,
   FieldLabel,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import { useState } from "react"
-import { Loader2, ArrowLeft } from "lucide-react"
-import { authClient } from "@/lib/auth/client"
-import { toast } from "sonner"
-import Link from "next/link"
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { Loader2, ArrowLeft } from "lucide-react";
+import { authClient } from "@/lib/auth/client";
+import { toast } from "sonner";
+import Link from "next/link";
 
 export function ForgotPassword({
   className,
   ...props
 }: React.ComponentProps<"form">) {
-  const [email, setEmail] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const handleForgotPassword = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!email) {
-      toast.error("Please enter your email address")
-      return
+      toast.error("Please enter your email address");
+      return;
     }
 
-    setLoading(true)
+    setLoading(true);
     try {
       await authClient.requestPasswordReset({
         email,
         redirectTo: `${window.location.origin}/reset-password`,
-      })
-      setSubmitted(true)
-      toast.success("Check your email for the password reset link!")
+      });
+      setSubmitted(true);
+      toast.success("Check your email for the password reset link!");
     } catch (error: any) {
-      console.error("Forgot password error:", error)
-      toast.error(error?.message || "Failed to send reset password link. Please try again.")
+      console.error("Forgot password error:", error);
+      toast.error(
+        error?.message ||
+          "Failed to send reset password link. Please try again.",
+      );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   if (submitted) {
     return (
@@ -72,7 +75,8 @@ export function ForgotPassword({
               We've sent a password reset link to <strong>{email}</strong>
             </p>
             <p className="text-muted-foreground text-sm text-balance">
-              Click the link in the email to reset your password. The link will expire in 24 hours.
+              Click the link in the email to reset your password. The link will
+              expire in 24 hours.
             </p>
           </div>
           <Field>
@@ -95,16 +99,21 @@ export function ForgotPassword({
           </Field>
         </FieldGroup>
       </div>
-    )
+    );
   }
 
   return (
-    <form className={cn("flex flex-col gap-6", className)} onSubmit={handleForgotPassword} {...props}>
+    <form
+      className={cn("flex flex-col gap-6", className)}
+      onSubmit={handleForgotPassword}
+      {...props}
+    >
       <FieldGroup>
         <div className="flex flex-col items-center gap-1 text-center">
           <h1 className="text-2xl font-bold">Forgot your password?</h1>
           <p className="text-muted-foreground text-sm text-balance">
-            Enter your email address and we'll send you a link to reset your password.
+            Enter your email address and we'll send you a link to reset your
+            password.
           </p>
         </div>
         <Field>
@@ -144,5 +153,5 @@ export function ForgotPassword({
         </Field>
       </FieldGroup>
     </form>
-  )
+  );
 }

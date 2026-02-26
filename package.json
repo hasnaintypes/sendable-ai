@@ -10,7 +10,9 @@
     "dev:build": "chokidar 'tsconfig*.json' 'src/**/*.ts' 'src/**/*.tsx' -i '**/*.test.ts' -c 'npm run build' --initial",
     "predev": "convex dev --skip-push && node -e \"if (!require('fs').existsSync('dist')) require('fs').mkdirSync('dist', { recursive: true })\"",
     "build": "convex codegen && next build",
-    "lint": "next lint && tsc -p convex && eslint convex"
+    "lint": "next lint && tsc -p convex && eslint convex",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\" \"convex/**/*.{ts,js}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,md}\" \"convex/**/*.{ts,js}\""
   },
   "dependencies": {
     "@convex-dev/better-auth": "^0.10.10",

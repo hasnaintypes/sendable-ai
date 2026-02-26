@@ -1,5 +1,5 @@
-import { Send } from "lucide-react"
-import { SignInForm } from "@/components/auth/SignInForm"
+import { Send } from "lucide-react";
+import { SignInForm } from "@/components/auth/SignInForm";
 
 export default function SignInPage() {
   return (
@@ -27,5 +27,5 @@ export default function SignInPage() {
         />
       </div>
     </div>
-  )
+  );
 }

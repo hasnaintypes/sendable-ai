@@ -1,5 +1,5 @@
-import { Send } from "lucide-react"
-import { ForgotPassword } from "@/components/auth/ForgotPassword"
+import { Send } from "lucide-react";
+import { ForgotPassword } from "@/components/auth/ForgotPassword";
 
 export default function ForgotPasswordPage() {
   return (
@@ -27,5 +27,5 @@ export default function ForgotPasswordPage() {
         />
       </div>
     </div>
-  )
+  );
 }

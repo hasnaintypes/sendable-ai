@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import { useState, useRef } from "react"
-import { motion } from "framer-motion"
-import { Menu, X, Send } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
+import { useState, useRef } from "react";
+import { motion } from "framer-motion";
+import { Menu, X, Send } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const navItems = [
   { label: "Features", href: "#features" },
   { label: "Pricing", href: "#pricing" },
   { label: "Docs", href: "#docs" },
   { label: "Blog", href: "#blog" },
-]
+];
 
 export function Navbar() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const navRef = useRef<HTMLDivElement>(null)
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navRef = useRef<HTMLDivElement>(null);
 
   return (
     <motion.header
@@ -34,7 +34,9 @@ export function Navbar() {
           <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center">
             <Send className="w-4 h-4 text-black" strokeWidth={2.5} />
           </div>
-          <span className="font-semibold text-white hidden sm:block">Sendable.ai</span>
+          <span className="font-semibold text-white hidden sm:block">
+            Sendable.ai
+          </span>
         </a>
 
         {/* Desktop Nav Items */}
@@ -63,12 +65,19 @@ export function Navbar() {
         {/* CTA Buttons */}
         <div className="hidden md:flex items-center gap-3">
           <Link href="/sign-in">
-            <Button variant="ghost" size="sm" className="text-zinc-400 hover:text-white hover:bg-zinc-800">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-zinc-400 hover:text-white hover:bg-zinc-800"
+            >
               Sign In
             </Button>
           </Link>
           <Link href="/sign-up">
-            <Button size="sm" className="shimmer-btn bg-white text-zinc-950 hover:bg-zinc-200 rounded-full px-4">
+            <Button
+              size="sm"
+              className="shimmer-btn bg-white text-zinc-950 hover:bg-zinc-200 rounded-full px-4"
+            >
               Get Started
             </Button>
           </Link>
@@ -105,16 +114,21 @@ export function Navbar() {
             ))}
             <hr className="border-zinc-800 my-2" />
             <Link href="/sign-in" className="w-full">
-              <Button variant="ghost" className="w-full justify-start text-zinc-400 hover:text-white">
+              <Button
+                variant="ghost"
+                className="w-full justify-start text-zinc-400 hover:text-white"
+              >
                 Sign In
               </Button>
             </Link>
             <Link href="/sign-up" className="w-full">
-              <Button className="w-full shimmer-btn bg-white text-zinc-950 hover:bg-zinc-200 rounded-full">Get Started</Button>
+              <Button className="w-full shimmer-btn bg-white text-zinc-950 hover:bg-zinc-200 rounded-full">
+                Get Started
+              </Button>
             </Link>
           </div>
         </motion.div>
       )}
     </motion.header>
-  )
+  );
 }
