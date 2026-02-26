@@ -42,7 +42,7 @@ export function SignInForm({
           if (ctx.data.twoFactorRedirect) {
             router.push("/verify-2fa")
           } else {
-            router.push("/")
+            router.push("/dashboard")
           }
         },
         onError: (ctx) => {
@@ -54,25 +54,8 @@ export function SignInForm({
     )
   }
 
-  const handleResetPassword = async () => {
-    if (!email) {
-      toast.error("Please enter your email address")
-      return
-    }
-    setLoading(true)
-    try {
-      const response = await authClient.requestPasswordReset({
-        email,
-        redirectTo: `${window.location.origin}/forget-password`,
-      })
-      toast.success("Check your email for the password reset link!")
-      console.log("Reset password response:", response)
-    } catch (error: any) {
-      console.error("Reset password error:", error)
-      toast.error(error?.message || "Failed to send reset password link. Please try again.")
-    } finally {
-      setLoading(false)
-    }
+  const handleForgotPasswordClick = () => {
+    router.push("/forget-password")
   }
 
   return (
@@ -101,7 +84,7 @@ export function SignInForm({
             <FieldLabel htmlFor="password">Password</FieldLabel>
             <button
               type="button"
-              onClick={handleResetPassword}
+              onClick={handleForgotPasswordClick}
               disabled={loading}
               className="ml-auto text-sm underline-offset-4 hover:underline disabled:opacity-50"
             >

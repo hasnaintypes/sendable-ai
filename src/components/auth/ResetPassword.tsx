@@ -46,7 +46,7 @@ export default function ResetPassword({
         },
         onSuccess: () => {
           setLoading(false);
-          redirect("/");
+          redirect("/sign-in");
         },
         onError: (ctx) => {
           setLoading(false);
