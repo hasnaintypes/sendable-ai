@@ -1,0 +1,84 @@
+name: PR Labeler
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  label:
+    name: Auto Label PR
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Label based on files
+        uses: actions/labeler@v5
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configuration-path: .github/labeler.yml
+
+      - name: Label based on PR title
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = context.payload.pull_request.title.toLowerCase();
+            const labels = [];
+            
+            // Check PR title prefix
+            if (title.startsWith('feat')) labels.push('feature');
+            if (title.startsWith('fix')) labels.push('bug');
+            if (title.startsWith('docs')) labels.push('documentation');
+            if (title.startsWith('refactor')) labels.push('refactor');
+            if (title.startsWith('test')) labels.push('testing');
+            if (title.startsWith('chore')) labels.push('chore');
+            if (title.startsWith('perf')) labels.push('performance');
+            
+            // Add size labels based on changes
+            const { data: files } = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number
+            });
+            
+            const changes = files.reduce((sum, file) => sum + file.changes, 0);
+            
+            if (changes < 50) labels.push('size/small');
+            else if (changes < 200) labels.push('size/medium');
+            else labels.push('size/large');
+            
+            // Add labels to PR
+            if (labels.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                labels: labels
+              });
+            }
+
+      - name: Check PR description
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.pull_request.body || '';
+            
+            if (body.length < 50) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                labels: ['needs-description']
+              });
+              
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                body: 'This PR needs a more detailed description. Please add:\n\n- What changes were made\n- Why these changes were necessary\n- How to test the changes\n\nRefer to our [Contributing Guidelines](../CONTRIBUTING.md) for more details.'
+              });
+            }

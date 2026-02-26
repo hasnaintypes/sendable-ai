@@ -1,0 +1,61 @@
+name: Welcome
+
+on:
+  issues:
+    types: [opened]
+  pull_request_target:
+    types: [opened]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  welcome:
+    name: Welcome New Contributors
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Welcome First-Time Issue Creator
+        uses: actions/first-interaction@v1
+        if: github.event_name == 'issues'
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-message: |
+            **Welcome to Sendable.ai!**
+            
+            Thank you for opening your first issue!
+            
+            We appreciate you taking the time to contribute to the project. A maintainer will review your issue soon and provide feedback.
+            
+            In the meantime, you might want to:
+            - Check our [Contributing Guide](../CONTRIBUTING.md) for more information
+            - Join our [Discussions](https://github.com/${{ github.repository }}/discussions) to chat with the community
+            - Review the [README](../README.md) for project overview and setup instructions
+            
+            Happy coding!
+
+      - name: Welcome First-Time PR Creator
+        uses: actions/first-interaction@v1
+        if: github.event_name == 'pull_request_target'
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          pr-message: |
+            **Welcome to Sendable.ai!**
+            
+            Thank you for opening your first pull request!
+            
+            We're excited to review your contribution. Here's what happens next:
+            
+            1. **Automated checks** will run to verify your code
+            2. A **maintainer will review** your changes
+            3. You may receive **feedback or change requests**
+            4. Once approved, your PR will be **merged**!
+            
+            **Quick tips:**
+            - Make sure all CI checks pass 
+            - Respond to any feedback promptly 
+            - Keep your PR focused on a single concern 
+            - Check out our [Contributing Guide](../CONTRIBUTING.md) for best practices
+            
+            Thank you for contributing! 
