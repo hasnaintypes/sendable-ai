@@ -55,10 +55,14 @@ jobs:
       - name: Set up Convex
         env:
           CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
+          CONVEX_DEPLOYMENT: ${{ secrets.CONVEX_DEPLOYMENT }}
         run: |
-          npx convex dev --once --configure=new || true
+          npx convex dev --once --configure=new
 
       - name: Build Next.js
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
+          CONVEX_DEPLOYMENT: ${{ secrets.CONVEX_DEPLOYMENT }}
         run: npm run build
 
   check-formatting:

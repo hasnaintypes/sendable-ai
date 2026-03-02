@@ -1,4 +1,4 @@
-# 📧 Sendable.ai
+# Sendable.ai
 
 > **AI-powered cold email outreach platform** that automates lead generation, personalized email campaigns, and intelligent response tracking for sales teams.
 
