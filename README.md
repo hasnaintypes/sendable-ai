@@ -147,7 +147,6 @@ sendable-ai/
 │   ├── auth/                  # Authentication logic
 │   ├── betterAuth/           # Better Auth configuration
 │   ├── emails/               # Email templates
-│   ├── todos/                # Example CRUD operations
 │   ├── users/                # User management
 │   └── schema.ts             # Database schema
 ├── src/

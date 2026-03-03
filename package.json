@@ -15,14 +15,14 @@
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,md}\" \"convex/**/*.{ts,js}\""
   },
   "dependencies": {
-    "@convex-dev/better-auth": "^0.10.10",
+    "@convex-dev/better-auth": "^0.10.13",
     "@convex-dev/resend": "^0.1.4",
     "@radix-ui/react-checkbox": "^1.1.4",
     "@radix-ui/react-dropdown-menu": "^2.1.6",
     "@radix-ui/react-label": "^2.1.2",
     "@radix-ui/react-slot": "^1.1.2",
     "@react-email/components": "0.5.0",
-    "better-auth": "^1.4.9",
+    "better-auth": "1.4.9",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "convex": "^1.31.7",

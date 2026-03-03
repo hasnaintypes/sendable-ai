@@ -18,8 +18,6 @@ import type * as emails_resetPassword from "../emails/resetPassword.js";
 import type * as emails_verifyEmail from "../emails/verifyEmail.js";
 import type * as emails_verifyOTP from "../emails/verifyOTP.js";
 import type * as http from "../http.js";
-import type * as todos_mutations from "../todos/mutations.js";
-import type * as todos_queries from "../todos/queries.js";
 
 import type {
   ApiFromModules,
@@ -38,8 +36,6 @@ declare const fullApi: ApiFromModules<{
   "emails/verifyEmail": typeof emails_verifyEmail;
   "emails/verifyOTP": typeof emails_verifyOTP;
   http: typeof http;
-  "todos/mutations": typeof todos_mutations;
-  "todos/queries": typeof todos_queries;
 }>;
 
 /**
