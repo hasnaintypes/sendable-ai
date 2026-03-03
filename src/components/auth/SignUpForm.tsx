@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { authClient } from "@/lib/auth/client";
+import { Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 
 export function SignupForm({
@@ -23,6 +24,7 @@ export function SignupForm({
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -51,10 +53,34 @@ export function SignupForm({
         },
         onError: async (ctx) => {
           setLoading(false);
-          console.error(ctx.error);
-          toast.error(ctx.error.message);
+          console.error("Sign up error:", ctx?.error);
+          const message = ctx?.error?.message || "Failed to create account. Please check your details.";
+          toast.error(message);
         },
       },
+    );
+  };
+
+  const handleSocialSignUp = async (provider: "github" | "google" | "slack") => {
+    await authClient.signIn.social(
+      {
+        provider,
+        callbackURL: "/dashboard",
+      },
+      {
+        onRequest: () => {
+          setLoading(true);
+        },
+        onSuccess: () => {
+          setLoading(false);
+        },
+        onError: (ctx) => {
+          setLoading(false);
+          console.error(`Social sign up error (${provider}):`, ctx?.error);
+          const message = ctx?.error?.message || `Failed to sign up with ${provider}.`;
+          toast.error(message);
+        },
+      }
     );
   };
 
@@ -114,30 +140,53 @@ export function SignupForm({
         </Field>
         <Field>
           <FieldLabel htmlFor="password">Password</FieldLabel>
-          <Input
-            id="password"
-            type="password"
-            placeholder="••••••••"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            disabled={loading}
-          />
+          <div className="relative">
+            <Input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="••••••••"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={loading}
+              className="pr-10"
+            />
+
+            <button
+              type="button"
+              tabIndex={-1}
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            >
+              {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+            </button>
+          </div>
           <FieldDescription>
             Must be at least 8 characters long.
           </FieldDescription>
         </Field>
         <Field>
           <FieldLabel htmlFor="confirm-password">Confirm Password</FieldLabel>
-          <Input
-            id="confirm-password"
-            type="password"
-            placeholder="••••••••"
-            required
-            value={passwordConfirmation}
-            onChange={(e) => setPasswordConfirmation(e.target.value)}
-            disabled={loading}
-          />
+          <div className="relative">
+            <Input
+              id="password-confirmation"
+              type={showPassword ? "text" : "password"}
+              placeholder="••••••••"
+              required
+              value={passwordConfirmation}
+              onChange={(e) => setPasswordConfirmation(e.target.value)}
+              disabled={loading}
+              className="pr-10"
+            />
+            <button
+              type="button"
+              tabIndex={-1}
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            >
+              {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+            </button>
+          </div>
           <FieldDescription>Please confirm your password.</FieldDescription>
         </Field>
         <Field>
@@ -154,7 +203,12 @@ export function SignupForm({
         </Field>
         <FieldSeparator>Or continue with</FieldSeparator>
         <Field>
-          <Button variant="outline" type="button" disabled={loading}>
+          <Button
+            variant="outline"
+            type="button"
+            disabled={loading}
+            onClick={() => handleSocialSignUp("github")}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"

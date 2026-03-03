@@ -15,6 +15,7 @@ import { use, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { authClient } from "@/lib/auth/client";
 import { redirect } from "next/navigation";
+import { toast } from "sonner";
 
 export default function ResetPassword({
   searchParams,
@@ -31,7 +32,7 @@ export default function ResetPassword({
     if (!token) return;
 
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      toast.error("Passwords do not match");
       return;
     }
 
@@ -46,11 +47,14 @@ export default function ResetPassword({
         },
         onSuccess: () => {
           setLoading(false);
+          toast.success("Password reset successfully!");
           redirect("/sign-in");
         },
         onError: (ctx) => {
           setLoading(false);
-          alert(ctx.error.message);
+          console.error("Reset password error:", ctx?.error);
+          const message = ctx?.error?.message || "Failed to reset password.";
+          toast.error(message);
         },
       },
     );

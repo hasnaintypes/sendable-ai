@@ -41,6 +41,7 @@ export function SignInForm({
         },
         onSuccess: (ctx) => {
           setLoading(false);
+          toast.success("Successfully signed in!");
           if (ctx.data.twoFactorRedirect) {
             router.push("/verify-2fa");
           } else {
@@ -49,10 +50,34 @@ export function SignInForm({
         },
         onError: (ctx) => {
           setLoading(false);
-          console.error(ctx.error);
-          toast.error(ctx.error.message);
+          console.error("Sign in error:", ctx?.error);
+          const message = ctx?.error?.message || "Failed to sign in. Please check your credentials.";
+          toast.error(message);
         },
       },
+    );
+  };
+
+  const handleSocialSignIn = async (provider: "github" | "google" | "slack") => {
+    await authClient.signIn.social(
+      {
+        provider,
+        callbackURL: "/dashboard",
+      },
+      {
+        onRequest: () => {
+          setLoading(true);
+        },
+        onSuccess: () => {
+          setLoading(false);
+        },
+        onError: (ctx) => {
+          setLoading(false);
+          console.error(`Social sign in error (${provider}):`, ctx?.error);
+          const message = ctx?.error?.message || `Failed to sign in with ${provider}.`;
+          toast.error(message);
+        },
+      }
     );
   };
 
@@ -115,7 +140,7 @@ export function SignInForm({
               onClick={() => setShowPassword((prev) => !prev)}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
             >
-              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
             </button>
           </div>
         </Field>
@@ -133,7 +158,12 @@ export function SignInForm({
         </Field>
         <FieldSeparator>Or continue with</FieldSeparator>
         <Field>
-          <Button variant="outline" type="button" disabled={loading}>
+          <Button
+            variant="outline"
+            type="button"
+            disabled={loading}
+            onClick={() => handleSocialSignIn("github")}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
