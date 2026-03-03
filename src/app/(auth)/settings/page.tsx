@@ -22,9 +22,8 @@ export default function SettingsPage() {
   const router = useRouter();
 
   const handleDisable2FA = async () => {
+    setLoading(true);
     try {
-      throw new Error("Not implemented");
-      setLoading(true);
       await authClient.twoFactor.disable({
         password: "",
       });
