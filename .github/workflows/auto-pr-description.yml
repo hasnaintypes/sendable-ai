@@ -1,0 +1,218 @@
+name: Auto PR Description
+
+on:
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  auto-describe:
+    name: Auto Generate PR Description
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Generate PR Description
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            
+            // Skip if PR already has a detailed description (>100 chars)
+            if (pr.body && pr.body.length > 100) {
+              console.log('PR already has a description, skipping...');
+              return;
+            }
+            
+            // Get commits
+            const { data: commits } = await github.rest.pulls.listCommits({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number
+            });
+            
+            // Get changed files
+            const { data: files } = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number
+            });
+            
+            // Analyze commits
+            const commitMessages = commits.map(c => c.commit.message);
+            const uniqueMessages = [...new Set(commitMessages.filter(m => 
+              !m.toLowerCase().includes('merge') && 
+              !m.toLowerCase().startsWith('wip')
+            ))];
+            
+            // Categorize changes
+            const categories = {
+              features: [],
+              fixes: [],
+              docs: [],
+              refactor: [],
+              tests: [],
+              chore: [],
+              other: []
+            };
+            
+            uniqueMessages.forEach(msg => {
+              const lower = msg.toLowerCase();
+              if (lower.startsWith('feat') || lower.includes('add') || lower.includes('implement')) {
+                categories.features.push(msg);
+              } else if (lower.startsWith('fix') || lower.includes('bug') || lower.includes('resolve')) {
+                categories.fixes.push(msg);
+              } else if (lower.startsWith('docs') || lower.includes('documentation')) {
+                categories.docs.push(msg);
+              } else if (lower.startsWith('refactor') || lower.includes('cleanup') || lower.includes('improve')) {
+                categories.refactor.push(msg);
+              } else if (lower.startsWith('test') || lower.includes('testing')) {
+                categories.tests.push(msg);
+              } else if (lower.startsWith('chore') || lower.includes('update dep')) {
+                categories.chore.push(msg);
+              } else {
+                categories.other.push(msg);
+              }
+            });
+            
+            // Analyze file changes
+            const fileCategories = {
+              backend: files.filter(f => f.filename.includes('convex/')),
+              frontend: files.filter(f => f.filename.includes('src/app/') || f.filename.includes('src/components/')),
+              auth: files.filter(f => f.filename.includes('auth')),
+              config: files.filter(f => f.filename.match(/\.(json|yml|yaml|config|env)$/)),
+              tests: files.filter(f => f.filename.includes('test') || f.filename.includes('spec')),
+              docs: files.filter(f => f.filename.match(/\.(md|txt)$/))
+            };
+            
+            // Determine PR type
+            let prType = 'chore';
+            let typeEmoji = '🔧';
+            
+            if (categories.features.length > 0) {
+              prType = 'feat';
+              typeEmoji = '✨';
+            } else if (categories.fixes.length > 0) {
+              prType = 'fix';
+              typeEmoji = '🐛';
+            } else if (categories.docs.length > 0) {
+              prType = 'docs';
+              typeEmoji = '📝';
+            } else if (categories.refactor.length > 0) {
+              prType = 'refactor';
+              typeEmoji = '♻️';
+            } else if (categories.tests.length > 0) {
+              prType = 'test';
+              typeEmoji = '✅';
+            }
+            
+            // Generate title if generic
+            let newTitle = pr.title;
+            const genericTitles = ['update', 'changes', 'patch', 'pr', 'merge'];
+            const isGeneric = genericTitles.some(t => pr.title.toLowerCase().includes(t));
+            
+            if (isGeneric || pr.title.length < 10) {
+              // Try to create better title from commits
+              const mainCommit = uniqueMessages[0] || 'Code changes';
+              const cleanTitle = mainCommit
+                .replace(/^(feat|fix|docs|refactor|test|chore)(\(.*?\))?:\s*/i, '')
+                .trim();
+              newTitle = `${prType}: ${cleanTitle}`;
+            }
+            
+            // Generate description
+            let description = '## 📝 Description\n\n';
+            
+            // Summary
+            const totalChanges = files.reduce((sum, f) => sum + f.changes, 0);
+            const areas = Object.entries(fileCategories)
+              .filter(([_, f]) => f.length > 0)
+              .map(([name, _]) => name);
+            
+            description += `This PR introduces changes to ${areas.join(', ')} with ${files.length} files modified (${totalChanges} lines changed).\n\n`;
+            
+            // Main changes
+            description += '## 🔄 Changes Made\n\n';
+            
+            for (const [category, messages] of Object.entries(categories)) {
+              if (messages.length > 0) {
+                const categoryName = category.charAt(0).toUpperCase() + category.slice(1);
+                description += `### ${categoryName}\n`;
+                messages.forEach(msg => {
+                  const cleaned = msg.replace(/^(feat|fix|docs|refactor|test|chore)(\(.*?\))?:\s*/i, '').trim();
+                  description += `- ${cleaned}\n`;
+                });
+                description += '\n';
+              }
+            }
+            
+            // File changes breakdown
+            description += '## 📁 Files Changed\n\n';
+            for (const [category, categoryFiles] of Object.entries(fileCategories)) {
+              if (categoryFiles.length > 0) {
+                const categoryName = category.charAt(0).toUpperCase() + category.slice(1);
+                description += `**${categoryName}** (${categoryFiles.length} files)\n`;
+              }
+            }
+            
+            // Type of change
+            description += '\n## 🏷️ Type of Change\n\n';
+            description += `- [${prType === 'fix' ? 'x' : ' '}] Bug fix\n`;
+            description += `- [${prType === 'feat' ? 'x' : ' '}] New feature\n`;
+            description += `- [${prType === 'docs' ? 'x' : ' '}] Documentation update\n`;
+            description += `- [${prType === 'refactor' ? 'x' : ' '}] Code refactoring\n`;
+            description += `- [${prType === 'test' ? 'x' : ' '}] Test addition or update\n`;
+            description += `- [ ] Breaking change\n`;
+            
+            // Testing
+            description += '\n## ✅ Testing Done\n\n';
+            description += '- [ ] Tested locally in development environment\n';
+            description += '- [ ] Added unit tests\n';
+            description += '- [ ] Verified in production-like environment\n';
+            
+            // Additional sections
+            description += '\n## 📷 Screenshots / Videos\n\n';
+            description += '_Add screenshots or videos if applicable_\n\n';
+            
+            description += '## 📚 Additional Notes\n\n';
+            description += '_Add any additional context or notes for reviewers_\n\n';
+            
+            description += '---\n';
+            description += `\n_🤖 This description was auto-generated from ${commits.length} commit(s). Please review and update as needed._`;
+            
+            // Update PR
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+              title: newTitle,
+              body: description
+            });
+            
+            console.log(`✅ Updated PR #${pr.number}`);
+            console.log(`Title: ${newTitle}`);
+            console.log(`Type: ${prType} ${typeEmoji}`);
+
+      - name: Add Comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body: '🤖 **Auto-generated PR description has been added!**\n\n' +
+                    'The title and description were generated based on your commits and file changes.\n' +
+                    'Please review and update:\n' +
+                    '- ✏️ Edit the description to add more context if needed\n' +
+                    '- 🔗 Link related issues using `Closes #123`\n' +
+                    '- ✅ Check the boxes for type of change and testing done\n' +
+                    '- 📷 Add screenshots/videos if UI changes were made\n\n' +
+                    'See our [Contributing Guidelines](../CONTRIBUTING.md) for best practices.'
+            });

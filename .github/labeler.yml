@@ -1,0 +1,60 @@
+# Auto-label PRs based on changed files
+
+# Frontend
+'frontend':
+  - changed-files:
+    - any-glob-to-any-file: 'src/app/**/*'
+    - any-glob-to-any-file: 'src/components/**/*'
+
+# Backend
+'backend':
+  - changed-files:
+    - any-glob-to-any-file: 'convex/**/*'
+
+# Authentication
+'auth':
+  - changed-files:
+    - any-glob-to-any-file: 'convex/auth/**/*'
+    - any-glob-to-any-file: 'convex/betterAuth/**/*'
+    - any-glob-to-any-file: 'src/components/auth/**/*'
+    - any-glob-to-any-file: 'src/lib/auth/**/*'
+
+# Email
+'email':
+  - changed-files:
+    - any-glob-to-any-file: 'convex/emails/**/*'
+
+# UI Components
+'ui':
+  - changed-files:
+    - any-glob-to-any-file: 'src/components/ui/**/*'
+
+# Styling
+'styling':
+  - changed-files:
+    - any-glob-to-any-file: '**/*.css'
+    - any-glob-to-any-file: 'tailwind.config.*'
+
+# Configuration
+'config':
+  - changed-files:
+    - any-glob-to-any-file: '*.config.*'
+    - any-glob-to-any-file: 'tsconfig.json'
+    - any-glob-to-any-file: '.eslintrc*'
+
+# Documentation
+'documentation':
+  - changed-files:
+    - any-glob-to-any-file: '*.md'
+    - any-glob-to-any-file: 'docs/**/*'
+
+# CI/CD
+'ci-cd':
+  - changed-files:
+    - any-glob-to-any-file: '.github/**/*'
+
+# Dependencies
+'dependencies':
+  - changed-files:
+    - any-glob-to-any-file: 'package.json'
+    - any-glob-to-any-file: 'package-lock.json'
