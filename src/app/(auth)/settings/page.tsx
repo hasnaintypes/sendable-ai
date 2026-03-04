@@ -27,7 +27,7 @@ export default function SettingsPage() {
       await authClient.twoFactor.disable({
         password: "",
       });
-    } catch {
+    } catch (error: any) {
       alert("Failed to disable 2FA. Please try again.");
     } finally {
       setLoading(false);
@@ -43,7 +43,7 @@ export default function SettingsPage() {
       try {
         await authClient.deleteUser();
         router.push("/");
-      } catch {
+      } catch (error: any) {
         alert("Failed to delete account. Please try again.");
       }
     }

@@ -78,7 +78,7 @@ export default function TwoFactorVerification() {
         trustDevice,
       });
       // Redirect will happen automatically on success
-    } catch {
+    } catch (error: any) {
       toast.error("Failed to verify code. Please try again.");
     } finally {
       setLoading(false);
@@ -92,7 +92,7 @@ export default function TwoFactorVerification() {
         code,
       });
       // Redirect will happen automatically on success
-    } catch {
+    } catch (error: any) {
       toast.error("Failed to verify backup code. Please try again.");
     } finally {
       setLoading(false);
