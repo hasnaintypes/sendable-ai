@@ -4,11 +4,9 @@ import {
     Head,
     Hr,
     Html,
-    Img,
     Preview,
     Section,
     Text,
-    Link,
     Font,
 } from "@react-email/components";
 import * as React from "react";
