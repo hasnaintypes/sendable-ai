@@ -5,7 +5,7 @@ import { betterAuth, type BetterAuthOptions } from "better-auth/minimal";
 import { convex } from "@convex-dev/better-auth/plugins";
 import {
   anonymous,
-  genericOAuth,
+  // genericOAuth, // TODO: Re-import when Slack OAuth is enabled
   twoFactor,
   username,
   magicLink,
@@ -23,6 +23,17 @@ import authConfig from "../auth.config";
 
 const siteUrl = process.env.SITE_URL;
 
+function requireEnv(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(
+      `Missing required environment variable: ${name}. ` +
+      `Please set it in your Convex dashboard or .env file.`
+    );
+  }
+  return value;
+}
+
 export const authComponent = createClient<DataModel, typeof authSchema>(
   components.betterAuth,
   {
@@ -37,10 +48,16 @@ export const createAuthOptions = (ctx: GenericCtx<DataModel>) => {
   return {
     baseURL: siteUrl,
     database: authComponent.adapter(ctx),
+    session: {
+      // Session expires after 7 days of inactivity
+      expiresIn: 60 * 60 * 24 * 7, // 7 days in seconds
+      // Update session every time it's accessed (rolling session)
+      updateAge: 60 * 60 * 24, // Update after 1 day of activity
+    },
     account: {
       accountLinking: {
         enabled: true,
-        allowDifferentEmails: true,
+        allowDifferentEmails: false,
       },
     },
     emailVerification: {
@@ -61,25 +78,26 @@ export const createAuthOptions = (ctx: GenericCtx<DataModel>) => {
         });
       },
     },
-    socialProviders: {
-      github: {
-        clientId: process.env.GITHUB_CLIENT_ID as string,
-        clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
-      },
-      google: {
-        clientId: process.env.GOOGLE_CLIENT_ID as string,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-        accessType: "offline",
-        prompt: "select_account consent",
-      },
+    // TODO: Uncomment social providers once OAuth env vars are configured
+    // in your Convex dashboard (GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET,
+    // GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET)
+    // socialProviders: {
+    //   github: {
+    //     clientId: requireEnv("GITHUB_CLIENT_ID"),
+    //     clientSecret: requireEnv("GITHUB_CLIENT_SECRET"),
+    //   },
+    //   google: {
+    //     clientId: requireEnv("GOOGLE_CLIENT_ID"),
+    //     clientSecret: requireEnv("GOOGLE_CLIENT_SECRET"),
+    //     accessType: "offline",
+    //     prompt: "select_account consent",
+    //   },
+    // },
+    rateLimit: {
+      window: 60, // 60 second window
+      max: 10, // max 10 requests per window
     },
     user: {
-      additionalFields: {
-        foo: {
-          type: "string",
-          required: false,
-        },
-      },
       deleteUser: {
         enabled: true,
       },
@@ -104,17 +122,19 @@ export const createAuthOptions = (ctx: GenericCtx<DataModel>) => {
         },
       }),
       twoFactor(),
-      genericOAuth({
-        config: [
-          {
-            providerId: "slack",
-            clientId: process.env.SLACK_CLIENT_ID as string,
-            clientSecret: process.env.SLACK_CLIENT_SECRET as string,
-            discoveryUrl: "https://slack.com/.well-known/openid-configuration",
-            scopes: ["openid", "email", "profile"],
-          },
-        ],
-      }),
+      // TODO: Uncomment Slack OAuth once env vars are configured
+      // (SLACK_CLIENT_ID, SLACK_CLIENT_SECRET)
+      // genericOAuth({
+      //   config: [
+      //     {
+      //       providerId: "slack",
+      //       clientId: requireEnv("SLACK_CLIENT_ID"),
+      //       clientSecret: requireEnv("SLACK_CLIENT_SECRET"),
+      //       discoveryUrl: "https://slack.com/.well-known/openid-configuration",
+      //       scopes: ["openid", "email", "profile"],
+      //     },
+      //   ],
+      // }),
       convex({
         authConfig,
       }),

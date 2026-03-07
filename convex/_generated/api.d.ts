@@ -20,6 +20,9 @@ import type * as emails_verifyOTP from "../emails/verifyOTP.js";
 import type * as http from "../http.js";
 import type * as todos_mutations from "../todos/mutations.js";
 import type * as todos_queries from "../todos/queries.js";
+import type * as userPreferences_mutations from "../userPreferences/mutations.js";
+import type * as userPreferences_queries from "../userPreferences/queries.js";
+import type * as userPreferences_upload from "../userPreferences/upload.js";
 
 import type {
   ApiFromModules,
@@ -40,6 +43,9 @@ declare const fullApi: ApiFromModules<{
   http: typeof http;
   "todos/mutations": typeof todos_mutations;
   "todos/queries": typeof todos_queries;
+  "userPreferences/mutations": typeof userPreferences_mutations;
+  "userPreferences/queries": typeof userPreferences_queries;
+  "userPreferences/upload": typeof userPreferences_upload;
 }>;
 
 /**
