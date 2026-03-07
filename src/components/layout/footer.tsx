@@ -28,13 +28,11 @@ export function Footer() {
           transition={{ duration: 0.6 }}
           className="grid grid-cols-2 md:grid-cols-5 gap-8"
         >
-          {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Logo href="/" showTitle className="mb-4" />
             <p className="text-sm text-muted-foreground mb-4">
               AI-powered email outreach for sales teams and recruiters.
             </p>
-            {/* Theme Toggle */}
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-card border border-border">
               <Sun className="h-3.5 w-3.5 text-muted-foreground" />
               <Switch
@@ -48,7 +46,6 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Links */}
           {Object.entries(footerLinks).map(([title, links]) => (
             <div key={title}>
               <h4 className="text-sm font-semibold text-foreground mb-4">
@@ -70,7 +67,6 @@ export function Footer() {
           ))}
         </motion.div>
 
-        {/* Bottom */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}

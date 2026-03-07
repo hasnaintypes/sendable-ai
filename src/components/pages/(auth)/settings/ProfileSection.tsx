@@ -137,7 +137,6 @@ export function ProfileSection() {
 
   return (
     <div className="w-full space-y-6">
-      {/* Header */}
       <div>
         <h2 className="text-2xl font-semibold tracking-tight">Profile</h2>
         <p className="text-sm text-muted-foreground">
@@ -145,7 +144,6 @@ export function ProfileSection() {
         </p>
       </div>
 
-      {/* Profile Photo */}
       <Card>
         <CardHeader>
           <CardTitle>Profile Photo</CardTitle>
@@ -189,7 +187,6 @@ export function ProfileSection() {
         </CardContent>
       </Card>
 
-      {/* Personal Info */}
       <Card>
         <CardHeader>
           <CardTitle>Personal Information</CardTitle>
@@ -248,7 +245,6 @@ export function ProfileSection() {
         </CardContent>
       </Card>
 
-      {/* Work Info */}
       <Card>
         <CardHeader>
           <CardTitle>Work Information</CardTitle>
@@ -278,7 +274,6 @@ export function ProfileSection() {
         </CardContent>
       </Card>
 
-      {/* Actions */}
       <div className="flex justify-end gap-3 pt-2">
         <Button variant="outline" onClick={handleCancel}>
           Cancel

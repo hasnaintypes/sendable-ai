@@ -138,7 +138,6 @@ export function NotificationSection() {
 
   return (
     <div className="w-full space-y-6">
-      {/* Header */}
       <div>
         <h2 className="text-2xl font-semibold tracking-tight">Notifications</h2>
         <p className="text-sm text-muted-foreground">
@@ -146,7 +145,6 @@ export function NotificationSection() {
         </p>
       </div>
 
-      {/* Notification Preferences */}
       <Card>
         <CardHeader>
           <CardTitle>Notification Preferences</CardTitle>
@@ -197,7 +195,6 @@ export function NotificationSection() {
         </CardContent>
       </Card>
 
-      {/* Actions */}
       <div className="flex justify-end gap-3 pt-2">
         <Button variant="outline" onClick={handleReset}>
           Reset to Default

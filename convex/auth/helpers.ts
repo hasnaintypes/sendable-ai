@@ -18,17 +18,6 @@ import { DataModel } from "../_generated/dataModel";
 import authConfig from "../auth.config";
 import logger from "../lib/logger";
 
-function requireEnv(name: string): string {
-  const value = process.env[name];
-  if (!value) {
-    throw new Error(
-      `Missing required environment variable: ${name}. ` +
-        `Please set it in your Convex dashboard or .env file.`,
-    );
-  }
-  return value;
-}
-
 export const authComponent = createClient<DataModel, typeof authSchema>(
   components.betterAuth,
   {

@@ -3,6 +3,7 @@
 import { motion, Variants } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 const avatars = [
   "https://img.freepik.com/free-photo/confident-cheerful-young-businesswoman_1262-20881.jpg?semt=ais_user_personalization&w=740&q=80",
@@ -108,7 +109,6 @@ export function Hero() {
           </Button>
         </motion.div>
 
-        {/* Social Proof */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -124,9 +124,11 @@ export function Hero() {
                 transition={{ duration: 0.4, delay: 0.8 + index * 0.1 }}
                 className="relative"
               >
-                <img
+                <Image
                   src={avatar || "/placeholder.svg"}
                   alt=""
+                  width={40}
+                  height={40}
                   className="w-10 h-10 rounded-full border-2 border-background object-cover"
                 />
               </motion.div>

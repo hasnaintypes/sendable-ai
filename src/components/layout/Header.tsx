@@ -30,10 +30,8 @@ export function Navbar() {
         ref={navRef}
         className="relative flex items-center justify-between px-4 py-3 rounded-full bg-card border border-border shadow-lg"
       >
-        {/* Logo */}
         <Logo href="/" showTitle titleClassName="hidden sm:block" />
 
-        {/* Desktop Nav Items */}
         <div className="hidden md:flex items-center gap-1 relative">
           {navItems.map((item, index) => (
             <a
@@ -56,7 +54,6 @@ export function Navbar() {
           ))}
         </div>
 
-        {/* CTA Buttons */}
         <div className="hidden md:flex items-center gap-3">
           <Link href="/sign-in">
             <Button
@@ -77,7 +74,6 @@ export function Navbar() {
           </Link>
         </div>
 
-        {/* Mobile Menu Button */}
         <button
           className="md:hidden p-2 text-muted-foreground hover:text-foreground cursor-pointer"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -87,7 +83,6 @@ export function Navbar() {
         </button>
       </nav>
 
-      {/* Mobile Menu */}
       {mobileMenuOpen && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}

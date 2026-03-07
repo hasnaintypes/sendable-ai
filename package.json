@@ -11,7 +11,8 @@
     "dev:build": "chokidar 'tsconfig*.json' 'src/**/*.ts' 'src/**/*.tsx' -i '**/*.test.ts' -c 'pnpm build' --initial",
     "predev": "convex dev --skip-push && node -e \"if (!require('fs').existsSync('dist')) require('fs').mkdirSync('dist', { recursive: true })\"",
     "build": "convex codegen && next build",
-    "lint": "next lint && tsc -p convex && eslint convex",
+    "typecheck": "tsc --noEmit && tsc -p convex --noEmit",
+    "lint": "eslint src convex",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\" \"convex/**/*.{ts,js}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,md}\" \"convex/**/*.{ts,js}\""
   },

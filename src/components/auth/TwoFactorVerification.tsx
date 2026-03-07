@@ -16,9 +16,7 @@ import { Loader2 } from "lucide-react";
 import { authClient } from "@/lib/auth/client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import logger from "@/lib/logger";
-
-type VerificationMethod = "totp" | "otp" | "backup";
+import type { VerificationMethod } from "@/types/auth";
 
 export default function TwoFactorVerification() {
   const [method, setMethod] = useState<VerificationMethod>("totp");

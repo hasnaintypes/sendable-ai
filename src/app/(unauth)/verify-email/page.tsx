@@ -43,7 +43,7 @@ function VerifyEmailContent() {
             },
           },
         );
-      } catch (err) {
+      } catch {
         setStatus("error");
         setMessage("An unexpected error occurred.");
       }

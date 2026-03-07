@@ -9,20 +9,16 @@
  *   logger.info("User signed in", { userId: "123" });
  */
 
-type LogLevel = "debug" | "info" | "warn" | "error";
-
-interface LogContext {
-  [key: string]: unknown;
-}
+import type { LogContext } from "@/types/logger";
 
 const isDev = process.env.NODE_ENV === "development";
 
 const logger = {
-  debug(message: string, _context?: LogContext) {
+  debug(message: string) {
     if (isDev) console.debug(`[DEBUG] ${message}`);
   },
 
-  info(message: string, _context?: LogContext) {
+  info(message: string) {
     if (isDev) console.info(`[INFO] ${message}`);
   },
 

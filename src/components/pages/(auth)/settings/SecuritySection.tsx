@@ -22,16 +22,7 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { toast } from "sonner";
 import Image from "next/image";
-
-interface Session {
-  id: string;
-  token: string;
-  userAgent: string | null;
-  ipAddress: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-  expiresAt: Date;
-}
+import type { Session } from "@/types/auth";
 
 function parseBrowserName(ua: string | null): string {
   if (!ua) return "unknown";

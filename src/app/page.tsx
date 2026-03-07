@@ -5,7 +5,7 @@ import { Pricing } from "@/components/pages/(unauth)/home/pricing";
 import { FinalCTA } from "@/components/pages/(unauth)/home/final-cta";
 import { Navbar } from "@/components/layout/Header";
 import { SmoothScroll } from "@/components/pages/(unauth)/home/smooth-scroll";
-import { Footer } from "@/components/layout/Footer";
+import { Footer } from "@/components/layout/footer";
 
 export default function Home() {
   return (

@@ -7,14 +7,7 @@ import { useState } from "react";
 import { Loader2, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
-
-type IntegrationKey =
-  | "gmail"
-  | "outlook"
-  | "googleCalendar"
-  | "slack"
-  | "discover"
-  | "discord";
+import type { IntegrationKey } from "@/types/integrations";
 
 export function IntegrationSection() {
   const [integrations, setIntegrations] = useState<
@@ -107,7 +100,6 @@ export function IntegrationSection() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div>
         <h2 className="text-2xl font-semibold tracking-tight">Integrations</h2>
         <p className="text-sm text-muted-foreground">
@@ -115,7 +107,6 @@ export function IntegrationSection() {
         </p>
       </div>
 
-      {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {integrationsList.map((integration) => {
           const connected = integrations[integration.id];
@@ -127,7 +118,6 @@ export function IntegrationSection() {
               className="transition-all hover:shadow-sm"
             >
               <CardContent className="p-5 space-y-4">
-                {/* Icon and Name */}
                 <div className="flex items-start gap-3">
                   <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border bg-background">
                     <Image
@@ -154,12 +144,10 @@ export function IntegrationSection() {
                   </div>
                 </div>
 
-                {/* Description */}
                 <p className="text-sm text-muted-foreground leading-relaxed min-h-[40px]">
                   {integration.description}
                 </p>
 
-                {/* Action Row */}
                 <div className="flex items-center justify-between gap-3 pt-2">
                   <Button
                     variant="outline"
@@ -190,7 +178,6 @@ export function IntegrationSection() {
         })}
       </div>
 
-      {/* Footer */}
       <div className="flex justify-end pt-2">
         <Button variant="outline" size="sm">
           Request Integration

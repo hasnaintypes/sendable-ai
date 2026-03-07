@@ -46,7 +46,7 @@ async function sendEmailWithFallback(
   if (emailProvider === "smtp") {
     try {
       return await sendViaSmtp(finalFrom, to, subject, html);
-    } catch (smtpError) {
+    } catch {
       logger.warn("SMTP delivery failed, attempting Resend fallback");
     }
   }
@@ -62,7 +62,7 @@ async function sendEmailWithFallback(
         html,
       });
       return;
-    } catch (resendError) {
+    } catch {
       logger.warn("Resend delivery failed, attempting SMTP fallback");
     }
   }
