@@ -28,10 +28,10 @@ export function Hero() {
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center px-4 pt-24 pb-16 overflow-hidden">
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-zinc-950 via-zinc-950 to-zinc-900 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-secondary pointer-events-none" />
 
       {/* Subtle radial glow */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-zinc-800/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-muted/20 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative z-10 max-w-5xl mx-auto text-center">
         {/* Badge */}
@@ -39,19 +39,16 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-900 border border-zinc-800 mb-8"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary border border-border mb-8"
         >
-          <span className="w-2 h-2 rounded-full bg-emerald-500 pulse-glow" />
-          <span className="text-sm text-zinc-400">
+          <span className="w-2 h-2 rounded-full bg-primary pulse-glow" />
+          <span className="text-sm text-muted-foreground">
             AI-Powered Email Outreach
           </span>
         </motion.div>
 
         {/* Headline with text mask animation */}
-        <h1
-          className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-6"
-          style={{ fontFamily: "var(--font-manrope), sans-serif" }}
-        >
+        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-foreground mb-6 font-sans">
           <span className="block overflow-hidden">
             <motion.span
               className="block"
@@ -65,7 +62,7 @@ export function Hero() {
           </span>
           <span className="block overflow-hidden">
             <motion.span
-              className="block text-zinc-500"
+              className="block text-muted-foreground"
               variants={textRevealVariants}
               initial="hidden"
               animate="visible"
@@ -81,7 +78,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
-          className="text-lg sm:text-xl text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed"
+          className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed"
         >
           Generate hyper-personalized outreach emails with AI. Automate audience
           research, intent-based generation, and follow-ups for sales,
@@ -97,7 +94,7 @@ export function Hero() {
         >
           <Button
             size="lg"
-            className="shimmer-btn bg-white text-zinc-950 hover:bg-zinc-200 rounded-full px-8 h-12 text-base font-medium shadow-lg shadow-white/10"
+            className="shimmer-btn bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 h-12 text-base font-medium shadow-lg"
           >
             Start Free Trial
             <ArrowRight className="ml-2 w-4 h-4" />
@@ -105,7 +102,7 @@ export function Hero() {
           <Button
             variant="outline"
             size="lg"
-            className="rounded-full px-8 h-12 text-base font-medium border-zinc-800 text-zinc-300 hover:bg-zinc-900 hover:text-white hover:border-zinc-700 bg-transparent"
+            className="rounded-full px-8 h-12 text-base font-medium border-border text-muted-foreground hover:bg-secondary hover:text-foreground"
           >
             See How It Works
           </Button>
@@ -130,13 +127,13 @@ export function Hero() {
                 <img
                   src={avatar || "/placeholder.svg"}
                   alt=""
-                  className="w-10 h-10 rounded-full border-2 border-zinc-950 object-cover"
+                  className="w-10 h-10 rounded-full border-2 border-background object-cover"
                 />
               </motion.div>
             ))}
           </div>
-          <p className="text-sm text-zinc-500">
-            Trusted by <span className="text-zinc-300 font-medium">500+</span>{" "}
+          <p className="text-sm text-muted-foreground">
+            Trusted by <span className="text-foreground font-medium">500+</span>{" "}
             sales teams & recruiters
           </p>
         </motion.div>
