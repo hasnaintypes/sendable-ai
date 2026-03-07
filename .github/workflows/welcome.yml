@@ -22,7 +22,7 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           issue-message: |
-            **Welcome to Sendable.ai!**
+            **Welcome to Sendable!**
             
             Thank you for opening your first issue!
             
@@ -41,7 +41,7 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           pr-message: |
-            **Welcome to Sendable.ai!**
+            **Welcome to Sendable!**
             
             Thank you for opening your first pull request!
             

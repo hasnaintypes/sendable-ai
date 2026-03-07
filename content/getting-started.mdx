@@ -1,0 +1,64 @@
+# Getting Started
+
+Get Sendable running locally in a few steps.
+
+## Prerequisites
+
+- [Node.js](https://nodejs.org) 18+
+- [pnpm](https://pnpm.io) 9+
+- A [Convex](https://convex.dev) account (free tier available)
+- A [Resend](https://resend.com) API key for sending emails
+
+## Installation
+
+Clone the repository and install dependencies:
+
+```bash
+git clone https://github.com/your-org/sendable-ai.git
+cd sendable-ai
+pnpm install
+```
+
+## Environment Variables
+
+Copy the example env file and fill in your values:
+
+```bash
+cp .env.example .env.local
+```
+
+Key variables you'll need:
+
+| Variable | Description |
+|----------|-------------|
+| `CONVEX_DEPLOYMENT` | Your Convex deployment URL |
+| `NEXT_PUBLIC_CONVEX_URL` | Public Convex URL for the client |
+| `RESEND_API_KEY` | Resend API key for transactional emails |
+| `BETTER_AUTH_SECRET` | Secret key for authentication |
+
+## Running the Dev Server
+
+Start both the Next.js frontend and Convex backend:
+
+```bash
+pnpm dev
+```
+
+This runs two processes concurrently:
+- **Frontend** — Next.js dev server with HTTPS
+- **Backend** — Convex dev server with type checking
+
+Open [https://localhost:3000](https://localhost:3000) to see the app.
+
+## Project Structure
+
+```
+sendable-ai/
+├── convex/           # Convex backend (schema, queries, mutations)
+├── src/
+│   ├── app/          # Next.js App Router pages
+│   ├── components/   # React components
+│   └── lib/          # Shared utilities
+├── content/docs/     # Documentation (MDX)
+└── public/           # Static assets
+```

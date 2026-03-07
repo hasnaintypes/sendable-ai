@@ -1,28 +1,32 @@
-import { ConvexClientProvider } from "../components/providers/ConvexClientProvider";
+import { ConvexClientProvider } from "@/components/providers/ConvexClientProvider";
 import { getToken } from "@/lib/auth/server";
 import { PropsWithChildren } from "react";
-import { Manrope } from "next/font/google";
+import { Inter } from "next/font/google";
 import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
-import { Toaster } from "sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/sonner";
 
-const manrope = Manrope({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-manrope",
+  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
-  title: "Sendable.ai - AI-Powered Email Outreach Platform",
+  title: "Sendable - AI-Powered Email Outreach Platform",
   description:
     "Generate personalized cold emails with AI. Automate research, personalization, and follow-ups for sales, recruiting, and networking.",
+  icons: {
+    icon: "/icons/sendable-logo.png",
+  },
 };
 
 export default async function RootLayout({ children }: PropsWithChildren) {
   const token = await getToken();
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
-      <body className={`${manrope.variable} font-sans antialiased`}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.variable} font-sans antialiased`}>
         <div className="noise-overlay" aria-hidden="true" />
         <ConvexClientProvider initialToken={token}>
           <ThemeProvider
@@ -31,8 +35,10 @@ export default async function RootLayout({ children }: PropsWithChildren) {
             enableSystem
             disableTransitionOnChange
           >
-            {children}
-            <Toaster />
+            <TooltipProvider>
+              {children}
+              <Toaster />
+            </TooltipProvider>
           </ThemeProvider>
         </ConvexClientProvider>
       </body>

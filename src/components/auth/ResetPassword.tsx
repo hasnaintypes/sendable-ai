@@ -9,9 +9,9 @@ import {
   CardDescription,
   CardFooter,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { use, useState } from "react";
+import { PasswordInput } from "@/components/ui/password-input";
+import { use, useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { authClient } from "@/lib/auth/client";
 import { redirect } from "next/navigation";
@@ -25,6 +25,7 @@ export default function ResetPassword({
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const passwordRef = useRef<HTMLInputElement>(null);
   const { token } = use(searchParams);
 
   const handleResetPassword = async (e: React.FormEvent) => {
@@ -52,9 +53,7 @@ export default function ResetPassword({
         },
         onError: (ctx) => {
           setLoading(false);
-          console.error("Reset password error:", ctx?.error);
-          const message = ctx?.error?.message || "Failed to reset password.";
-          toast.error(message);
+          toast.error(ctx.error.message);
         },
       },
     );
@@ -103,11 +102,13 @@ export default function ResetPassword({
           <form onSubmit={handleResetPassword} className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="password">New Password</Label>
-              <Input
+              <PasswordInput
+                ref={passwordRef}
                 id="password"
-                type="password"
                 placeholder="Enter your new password"
                 required
+                showStrength
+                showStrengthOnSubmit
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -115,9 +116,8 @@ export default function ResetPassword({
 
             <div className="grid gap-2">
               <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <Input
+              <PasswordInput
                 id="confirmPassword"
-                type="password"
                 placeholder="Confirm your new password"
                 required
                 value={confirmPassword}

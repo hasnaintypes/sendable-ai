@@ -21,32 +21,49 @@ export const BaseLayout = ({ preview, children }: BaseLayoutProps) => {
         <Html>
             <Head>
                 <Font
-                    fontFamily="Roboto"
-                    fallbackFontFamily="Verdana"
+                    fontFamily="Inter"
+                    fallbackFontFamily="Helvetica"
                     webFont={{
-                        url: "https://fonts.gstatic.com/s/roboto/v27/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2",
+                        url: "https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hiA.woff2",
                         format: "woff2",
                     }}
                     fontWeight={400}
+                    fontStyle="normal"
+                />
+                <Font
+                    fontFamily="Inter"
+                    fallbackFontFamily="Helvetica"
+                    webFont={{
+                        url: "https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fAZ9hiA.woff2",
+                        format: "woff2",
+                    }}
+                    fontWeight={600}
                     fontStyle="normal"
                 />
             </Head>
             <Preview>{preview}</Preview>
             <Body style={main}>
                 <Container style={container}>
-                    <Section style={logoSection}>
-                        <Text style={logoText}>Sendable AI</Text>
+                    <Section style={header}>
+                        <Text style={logoText}>Sendable</Text>
                     </Section>
-                    <Section style={contentSection}>
+
+                    <Section style={content}>
                         {children}
                     </Section>
-                    <Hr style={hr} />
-                    <Section style={footerSection}>
-                        <Text style={footerText}>
-                            Sent by Sendable AI • Innovations in AI Workflow
+
+                    <Hr style={divider} />
+
+                    <Section style={footer}>
+                        <Text style={footerPrimary}>
+                            Sendable - AI-Powered Email Outreach
                         </Text>
-                        <Text style={footerText}>
-                            © 2026 Sendable AI. All rights reserved.
+                        <Text style={footerSecondary}>
+                            You received this email because you have an account with Sendable.
+                            If you didn&apos;t expect this, you can safely ignore it.
+                        </Text>
+                        <Text style={footerCopyright}>
+                            &copy; {new Date().getFullYear()} Sendable. All rights reserved.
                         </Text>
                     </Section>
                 </Container>
@@ -58,49 +75,65 @@ export const BaseLayout = ({ preview, children }: BaseLayoutProps) => {
 export default BaseLayout;
 
 const main = {
-    backgroundColor: "#f4f7f9",
-    color: "#1a1a1a",
-    fontFamily: "'Roboto', sans-serif",
+    backgroundColor: "#f8fafc",
+    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif",
 };
 
 const container = {
     backgroundColor: "#ffffff",
     margin: "40px auto",
-    padding: "40px",
-    borderRadius: "12px",
-    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
-    maxWidth: "600px",
+    borderRadius: "16px",
+    overflow: "hidden" as const,
+    maxWidth: "560px",
+    border: "1px solid #e2e8f0",
 };
 
-const logoSection = {
-    marginBottom: "32px",
-    textAlign: "center" as const,
+const header = {
+    padding: "32px 40px 24px",
+    borderBottom: "1px solid #f1f5f9",
 };
 
 const logoText = {
-    fontSize: "24px",
+    fontSize: "22px",
     fontWeight: "700",
     letterSpacing: "-0.5px",
-    color: "#7c3aed", // Premium Violet
+    color: "#7c3aed",
+    margin: "0",
+    textDecoration: "none",
+};
+
+const content = {
+    padding: "32px 40px",
+};
+
+const divider = {
+    borderColor: "#f1f5f9",
     margin: "0",
 };
 
-const contentSection = {
-    marginBottom: "32px",
+const footer = {
+    padding: "24px 40px 32px",
+    backgroundColor: "#fafbfc",
 };
 
-const hr = {
-    borderColor: "#e5e7eb",
-    margin: "32px 0",
+const footerPrimary = {
+    color: "#64748b",
+    fontSize: "13px",
+    fontWeight: "600",
+    lineHeight: "1.4",
+    margin: "0 0 8px",
 };
 
-const footerSection = {
-    textAlign: "center" as const,
-};
-
-const footerText = {
-    color: "#6b7280",
+const footerSecondary = {
+    color: "#94a3b8",
     fontSize: "12px",
-    lineHeight: "18px",
-    margin: "4px 0",
+    lineHeight: "1.5",
+    margin: "0 0 12px",
+};
+
+const footerCopyright = {
+    color: "#cbd5e1",
+    fontSize: "11px",
+    lineHeight: "1.4",
+    margin: "0",
 };

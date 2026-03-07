@@ -1,3 +1,5 @@
+"use node";
+
 import { components, api } from "../_generated/api";
 import authSchema from "../betterAuth/schema";
 import { createClient, GenericCtx } from "@convex-dev/better-auth";
@@ -5,7 +7,7 @@ import { betterAuth, type BetterAuthOptions } from "better-auth/minimal";
 import { convex } from "@convex-dev/better-auth/plugins";
 import {
   anonymous,
-  genericOAuth,
+  // genericOAuth, // TODO: Re-import when Slack OAuth is enabled
   twoFactor,
   username,
   magicLink,
@@ -14,8 +16,7 @@ import {
 import { requireActionCtx } from "@convex-dev/better-auth/utils";
 import { DataModel } from "../_generated/dataModel";
 import authConfig from "../auth.config";
-
-const siteUrl = process.env.SITE_URL;
+import logger from "../lib/logger";
 
 export const authComponent = createClient<DataModel, typeof authSchema>(
   components.betterAuth,
@@ -23,67 +24,88 @@ export const authComponent = createClient<DataModel, typeof authSchema>(
     local: {
       schema: authSchema,
     },
-    verbose: true,
+    verbose: process.env.NODE_ENV === "development",
   },
 );
 
 export const createAuthOptions = (ctx: GenericCtx<DataModel>) => {
-  const finalSiteUrl = (process.env.SITE_URL || process.env.BETTER_AUTH_URL || "https://localhost:3000") as string;
+  const finalSiteUrl = (process.env.SITE_URL ||
+    process.env.BETTER_AUTH_URL ||
+    "http://localhost:3000") as string;
   if (!process.env.SITE_URL && !process.env.BETTER_AUTH_URL) {
-    console.warn("WARNING: SITE_URL or BETTER_AUTH_URL is not set in Convex environment variables. This will cause INVALID_ORIGIN errors.");
+    logger.warn(
+      "SITE_URL or BETTER_AUTH_URL is not set — this will cause INVALID_ORIGIN errors",
+    );
   }
   return {
     baseURL: finalSiteUrl,
     trustedOrigins: [finalSiteUrl],
     database: authComponent.adapter(ctx),
+    session: {
+      // Session expires after 7 days of inactivity
+      expiresIn: 60 * 60 * 24 * 7, // 7 days in seconds
+      // Update session every time it's accessed (rolling session)
+      updateAge: 60 * 60 * 24, // Update after 1 day of activity
+    },
     account: {
       accountLinking: {
         enabled: true,
-        allowDifferentEmails: true,
+        allowDifferentEmails: false,
       },
     },
     emailVerification: {
       sendVerificationEmail: async ({ user, url }) => {
         // Ensure the URL uses the correct protocol and path
-        const verificationUrl = url.replace("http://localhost:3000", finalSiteUrl)
+        const verificationUrl = url
+          .replace("http://localhost:3000", finalSiteUrl)
           .replace("/api/auth/verify-email", "/verify-email");
 
-        await requireActionCtx(ctx).runAction(api.emails.email.sendEmailVerification, {
-          to: user.email,
-          url: verificationUrl,
-        });
+        await requireActionCtx(ctx).runAction(
+          api.emails.email.sendEmailVerification,
+          {
+            to: user.email,
+            url: verificationUrl,
+          },
+        );
       },
     },
     emailAndPassword: {
       enabled: true,
       requireEmailVerification: true,
       sendResetPassword: async ({ user, url }) => {
-        const resetPasswordUrl = url.replace("http://localhost:3000", finalSiteUrl);
-        await requireActionCtx(ctx).runAction(api.emails.email.sendResetPassword, {
-          to: user.email,
-          url: resetPasswordUrl,
-        });
+        const resetPasswordUrl = url.replace(
+          "http://localhost:3000",
+          finalSiteUrl,
+        );
+        await requireActionCtx(ctx).runAction(
+          api.emails.email.sendResetPassword,
+          {
+            to: user.email,
+            url: resetPasswordUrl,
+          },
+        );
       },
     },
-    socialProviders: {
-      github: {
-        clientId: process.env.GITHUB_CLIENT_ID as string,
-        clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
-      },
-      google: {
-        clientId: process.env.GOOGLE_CLIENT_ID as string,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-        accessType: "offline",
-        prompt: "select_account consent",
-      },
+    // TODO: Uncomment social providers once OAuth env vars are configured
+    // in your Convex dashboard (GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET,
+    // GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET)
+    // socialProviders: {
+    //   github: {
+    //     clientId: requireEnv("GITHUB_CLIENT_ID"),
+    //     clientSecret: requireEnv("GITHUB_CLIENT_SECRET"),
+    //   },
+    //   google: {
+    //     clientId: requireEnv("GOOGLE_CLIENT_ID"),
+    //     clientSecret: requireEnv("GOOGLE_CLIENT_SECRET"),
+    //     accessType: "offline",
+    //     prompt: "select_account consent",
+    //   },
+    // },
+    rateLimit: {
+      window: 60, // 60 second window
+      max: 10, // max 10 requests per window
     },
     user: {
-      additionalFields: {
-        foo: {
-          type: "string",
-          required: false,
-        },
-      },
       deleteUser: {
         enabled: true,
       },
@@ -93,32 +115,44 @@ export const createAuthOptions = (ctx: GenericCtx<DataModel>) => {
       username(),
       magicLink({
         sendMagicLink: async ({ email, url }) => {
-          await requireActionCtx(ctx).runAction(api.emails.email.sendMagicLink, {
-            to: email,
-            url,
-          });
+          const magicLinkUrl = url.replace(
+            "http://localhost:3000",
+            finalSiteUrl,
+          );
+          await requireActionCtx(ctx).runAction(
+            api.emails.email.sendMagicLink,
+            {
+              to: email,
+              url: magicLinkUrl,
+            },
+          );
         },
       }),
       emailOTP({
         async sendVerificationOTP({ email, otp }) {
-          await requireActionCtx(ctx).runAction(api.emails.email.sendOTPVerification, {
-            to: email,
-            code: otp,
-          });
+          await requireActionCtx(ctx).runAction(
+            api.emails.email.sendOTPVerification,
+            {
+              to: email,
+              code: otp,
+            },
+          );
         },
       }),
       twoFactor(),
-      genericOAuth({
-        config: [
-          {
-            providerId: "slack",
-            clientId: process.env.SLACK_CLIENT_ID as string,
-            clientSecret: process.env.SLACK_CLIENT_SECRET as string,
-            discoveryUrl: "https://slack.com/.well-known/openid-configuration",
-            scopes: ["openid", "email", "profile"],
-          },
-        ],
-      }),
+      // TODO: Uncomment Slack OAuth once env vars are configured
+      // (SLACK_CLIENT_ID, SLACK_CLIENT_SECRET)
+      // genericOAuth({
+      //   config: [
+      //     {
+      //       providerId: "slack",
+      //       clientId: requireEnv("SLACK_CLIENT_ID"),
+      //       clientSecret: requireEnv("SLACK_CLIENT_SECRET"),
+      //       discoveryUrl: "https://slack.com/.well-known/openid-configuration",
+      //       scopes: ["openid", "email", "profile"],
+      //     },
+      //   ],
+      // }),
       convex({
         authConfig,
       }),

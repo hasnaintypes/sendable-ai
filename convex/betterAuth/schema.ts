@@ -10,8 +10,6 @@ import { tables } from "./generatedSchema";
 // https://labs.convex.dev/better-auth/triggers
 const schema = defineSchema({
   ...tables,
-  // Spread the generated schema and add a custom index
-  user: tables.user.index("custom_index", ["foo"]),
 });
 
 export default schema;

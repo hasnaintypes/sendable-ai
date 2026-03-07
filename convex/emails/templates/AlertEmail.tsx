@@ -12,10 +12,11 @@ export const AlertEmail = ({ title, message }: AlertEmailProps) => {
         <BaseLayout preview={title}>
             <Heading style={h1}>{title}</Heading>
             <Section style={alertBox}>
-                <Text style={text}>{message}</Text>
+                <Text style={alertText}>{message}</Text>
             </Section>
-            <Text style={footerText}>
-                If you have any questions, please contact our support team.
+            <Text style={hint}>
+                This is an automated security alert from your Sendable account.
+                If you have questions, please contact our support team.
             </Text>
         </BaseLayout>
     );
@@ -24,31 +25,32 @@ export const AlertEmail = ({ title, message }: AlertEmailProps) => {
 export default AlertEmail;
 
 const h1 = {
-    color: "#1f2937",
+    color: "#0f172a",
     fontSize: "24px",
     fontWeight: "700",
-    lineHeight: "1.2",
-    marginBottom: "24px",
+    lineHeight: "1.3",
+    margin: "0 0 16px",
+    letterSpacing: "-0.3px",
 };
 
 const alertBox = {
     backgroundColor: "#fef2f2",
-    border: "1px solid #fee2e2",
-    borderRadius: "8px",
-    padding: "24px",
-    marginBottom: "24px",
+    border: "1px solid #fecaca",
+    borderRadius: "10px",
+    padding: "20px",
+    margin: "0 0 24px",
 };
 
-const text = {
-    color: "#b91c1c",
-    fontSize: "16px",
-    lineHeight: "24px",
+const alertText = {
+    color: "#991b1b",
+    fontSize: "14px",
+    lineHeight: "1.6",
     margin: "0",
 };
 
-const footerText = {
-    color: "#6b7280",
-    fontSize: "14px",
-    lineHeight: "20px",
-    marginTop: "24px",
+const hint = {
+    color: "#64748b",
+    fontSize: "13px",
+    lineHeight: "1.5",
+    margin: "0",
 };
