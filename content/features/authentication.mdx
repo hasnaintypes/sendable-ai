@@ -1,0 +1,37 @@
+# Authentication
+
+Sendable includes a full authentication system powered by [Better Auth](https://www.better-auth.com/)
+with a Convex backend adapter.
+
+## Auth Methods
+
+### Email and Password
+
+Standard email/password registration and sign-in with:
+
+- Email verification via OTP or magic link
+- Password reset flow with secure tokens
+- Input validation with Zod schemas
+
+### Magic Links
+
+Passwordless authentication via email magic links. Users receive a link that
+signs them in directly — no password required.
+
+## Two-Factor Authentication (2FA)
+
+Sendable supports TOTP-based two-factor authentication:
+
+1. Enable 2FA from your account settings.
+2. Scan the QR code with an authenticator app (Google Authenticator, Authy, etc.).
+3. Enter the verification code to confirm setup.
+4. On subsequent sign-ins, you'll be prompted for your 2FA code.
+
+## Session Management
+
+Sessions are managed through Better Auth with Convex as the storage backend:
+
+- Secure, HTTP-only session cookies
+- Automatic token refresh
+- Active session listing in account settings
+- Remote session revocation
