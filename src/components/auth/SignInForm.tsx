@@ -15,6 +15,7 @@ import { Loader2 } from "lucide-react";
 import { authClient } from "@/lib/auth/client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { Eye, EyeOff } from "lucide-react";
 
 export function SignInForm({
   className,
@@ -24,6 +25,7 @@ export function SignInForm({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,6 +41,7 @@ export function SignInForm({
         },
         onSuccess: (ctx) => {
           setLoading(false);
+          toast.success("Successfully signed in!");
           if (ctx.data.twoFactorRedirect) {
             router.push("/verify-2fa");
           } else {
@@ -47,10 +50,34 @@ export function SignInForm({
         },
         onError: (ctx) => {
           setLoading(false);
-          console.error(ctx.error);
-          toast.error(ctx.error.message);
+          console.error("Sign in error:", ctx?.error);
+          const message = ctx?.error?.message || "Failed to sign in. Please check your credentials.";
+          toast.error(message);
         },
       },
+    );
+  };
+
+  const handleSocialSignIn = async (provider: "github" | "google" | "slack") => {
+    await authClient.signIn.social(
+      {
+        provider,
+        callbackURL: "/dashboard",
+      },
+      {
+        onRequest: () => {
+          setLoading(true);
+        },
+        onSuccess: () => {
+          setLoading(false);
+        },
+        onError: (ctx) => {
+          setLoading(false);
+          console.error(`Social sign in error (${provider}):`, ctx?.error);
+          const message = ctx?.error?.message || `Failed to sign in with ${provider}.`;
+          toast.error(message);
+        },
+      }
     );
   };
 
@@ -95,15 +122,27 @@ export function SignInForm({
               Forgot your password?
             </button>
           </div>
-          <Input
-            id="password"
-            type="password"
-            placeholder="••••••••"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            disabled={loading}
-          />
+          <div className="relative">
+            <Input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="••••••••"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={loading}
+              className="pr-10"
+            />
+
+            <button
+              type="button"
+              tabIndex={-1}
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            >
+              {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+            </button>
+          </div>
         </Field>
         <Field>
           <Button type="submit" disabled={loading} className="w-full">
@@ -119,7 +158,12 @@ export function SignInForm({
         </Field>
         <FieldSeparator>Or continue with</FieldSeparator>
         <Field>
-          <Button variant="outline" type="button" disabled={loading}>
+          <Button
+            variant="outline"
+            type="button"
+            disabled={loading}
+            onClick={() => handleSocialSignIn("github")}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"

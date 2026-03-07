@@ -5,6 +5,7 @@ import { Manrope } from "next/font/google";
 import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { Toaster } from "sonner";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -31,6 +32,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
             disableTransitionOnChange
           >
             {children}
+            <Toaster />
           </ThemeProvider>
         </ConvexClientProvider>
       </body>

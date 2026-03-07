@@ -1,4 +1,4 @@
-import { components } from "../_generated/api";
+import { components, api } from "../_generated/api";
 import authSchema from "../betterAuth/schema";
 import { createClient, GenericCtx } from "@convex-dev/better-auth";
 import { betterAuth, type BetterAuthOptions } from "better-auth/minimal";
@@ -11,12 +11,6 @@ import {
   magicLink,
   emailOTP,
 } from "better-auth/plugins";
-import {
-  sendMagicLink,
-  sendOTPVerification,
-  sendEmailVerification,
-  sendResetPassword,
-} from "../emails/email";
 import { requireActionCtx } from "@convex-dev/better-auth/utils";
 import { DataModel } from "../_generated/dataModel";
 import authConfig from "../auth.config";
@@ -29,13 +23,18 @@ export const authComponent = createClient<DataModel, typeof authSchema>(
     local: {
       schema: authSchema,
     },
-    verbose: false,
+    verbose: true,
   },
 );
 
 export const createAuthOptions = (ctx: GenericCtx<DataModel>) => {
+  const finalSiteUrl = (process.env.SITE_URL || process.env.BETTER_AUTH_URL || "https://localhost:3000") as string;
+  if (!process.env.SITE_URL && !process.env.BETTER_AUTH_URL) {
+    console.warn("WARNING: SITE_URL or BETTER_AUTH_URL is not set in Convex environment variables. This will cause INVALID_ORIGIN errors.");
+  }
   return {
-    baseURL: siteUrl,
+    baseURL: finalSiteUrl,
+    trustedOrigins: [finalSiteUrl],
     database: authComponent.adapter(ctx),
     account: {
       accountLinking: {
@@ -45,9 +44,13 @@ export const createAuthOptions = (ctx: GenericCtx<DataModel>) => {
     },
     emailVerification: {
       sendVerificationEmail: async ({ user, url }) => {
-        await sendEmailVerification(requireActionCtx(ctx), {
+        // Ensure the URL uses the correct protocol and path
+        const verificationUrl = url.replace("http://localhost:3000", finalSiteUrl)
+          .replace("/api/auth/verify-email", "/verify-email");
+
+        await requireActionCtx(ctx).runAction(api.emails.email.sendEmailVerification, {
           to: user.email,
-          url,
+          url: verificationUrl,
         });
       },
     },
@@ -55,9 +58,10 @@ export const createAuthOptions = (ctx: GenericCtx<DataModel>) => {
       enabled: true,
       requireEmailVerification: true,
       sendResetPassword: async ({ user, url }) => {
-        await sendResetPassword(requireActionCtx(ctx), {
+        const resetPasswordUrl = url.replace("http://localhost:3000", finalSiteUrl);
+        await requireActionCtx(ctx).runAction(api.emails.email.sendResetPassword, {
           to: user.email,
-          url,
+          url: resetPasswordUrl,
         });
       },
     },
@@ -89,7 +93,7 @@ export const createAuthOptions = (ctx: GenericCtx<DataModel>) => {
       username(),
       magicLink({
         sendMagicLink: async ({ email, url }) => {
-          await sendMagicLink(requireActionCtx(ctx), {
+          await requireActionCtx(ctx).runAction(api.emails.email.sendMagicLink, {
             to: email,
             url,
           });
@@ -97,7 +101,7 @@ export const createAuthOptions = (ctx: GenericCtx<DataModel>) => {
       }),
       emailOTP({
         async sendVerificationOTP({ email, otp }) {
-          await sendOTPVerification(requireActionCtx(ctx), {
+          await requireActionCtx(ctx).runAction(api.emails.email.sendOTPVerification, {
             to: email,
             code: otp,
           });
