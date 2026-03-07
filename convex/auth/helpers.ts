@@ -1,3 +1,5 @@
+"use node";
+
 import { components, api } from "../_generated/api";
 import authSchema from "../betterAuth/schema";
 import { createClient, GenericCtx } from "@convex-dev/better-auth";
@@ -14,8 +16,7 @@ import {
 import { requireActionCtx } from "@convex-dev/better-auth/utils";
 import { DataModel } from "../_generated/dataModel";
 import authConfig from "../auth.config";
-
-const siteUrl = process.env.SITE_URL;
+import logger from "../lib/logger";
 
 function requireEnv(name: string): string {
   const value = process.env[name];
@@ -34,14 +35,14 @@ export const authComponent = createClient<DataModel, typeof authSchema>(
     local: {
       schema: authSchema,
     },
-    verbose: true,
+    verbose: process.env.NODE_ENV === "development",
   },
 );
 
 export const createAuthOptions = (ctx: GenericCtx<DataModel>) => {
-  const finalSiteUrl = (process.env.SITE_URL || process.env.BETTER_AUTH_URL || "https://localhost:3000") as string;
+  const finalSiteUrl = (process.env.SITE_URL || process.env.BETTER_AUTH_URL || "http://localhost:3000") as string;
   if (!process.env.SITE_URL && !process.env.BETTER_AUTH_URL) {
-    console.warn("WARNING: SITE_URL or BETTER_AUTH_URL is not set in Convex environment variables. This will cause INVALID_ORIGIN errors.");
+    logger.warn("SITE_URL or BETTER_AUTH_URL is not set — this will cause INVALID_ORIGIN errors");
   }
   return {
     baseURL: finalSiteUrl,
@@ -111,9 +112,10 @@ export const createAuthOptions = (ctx: GenericCtx<DataModel>) => {
       username(),
       magicLink({
         sendMagicLink: async ({ email, url }) => {
+          const magicLinkUrl = url.replace("http://localhost:3000", finalSiteUrl);
           await requireActionCtx(ctx).runAction(api.emails.email.sendMagicLink, {
             to: email,
-            url,
+            url: magicLinkUrl,
           });
         },
       }),

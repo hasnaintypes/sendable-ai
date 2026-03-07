@@ -15,6 +15,7 @@ import nodemailer from "nodemailer";
 
 import { action } from "../_generated/server";
 import { v } from "convex/values";
+import logger from "../lib/logger";
 
 export const resend = new Resend(components.resend, {
   testMode: false,
@@ -34,49 +35,39 @@ async function sendEmailWithFallback(
   }
 ) {
   const { to, subject, html, from } = options;
-  const fromName = process.env.SMTP_FROM_NAME || "Sendable AI";
+  const fromName = process.env.SMTP_FROM_NAME || "Sendable";
   const fromEmail = process.env.SMTP_FROM_EMAIL || "onboarding@resend.dev";
   const finalFrom = from || `${fromName} <${fromEmail}>`;
 
   const emailProvider = (process.env.EMAIL_PROVIDER || "resend").toLowerCase();
   const verifiedRecipient = process.env.RESEND_VERIFIED_RECIPIENT;
 
-  console.log(`[EmailService] Preparing to send to: ${to}`);
-  console.log(`[EmailService] Provider: ${emailProvider}`);
-
   // If prioritizing SMTP
   if (emailProvider === "smtp") {
-    console.log(`[EmailService] Prioritizing SMTP delivery to ${to}`);
     try {
       return await sendViaSmtp(finalFrom, to, subject, html);
     } catch (smtpError) {
-      console.error("[EmailService] SMTP delivery failed:", smtpError);
-      console.log("[EmailService] Attempting Resend fallback...");
+      logger.warn("SMTP delivery failed, attempting Resend fallback");
     }
   }
 
   const canUseResend = !verifiedRecipient || to.toLowerCase() === verifiedRecipient.toLowerCase();
-  console.log(`[EmailService] Can use Resend for ${to}: ${canUseResend}`);
 
   if (canUseResend) {
     try {
-      console.log(`[EmailService] Attempting Resend to ${to}...`);
       await resend.sendEmail(ctx, {
         from: finalFrom,
         to,
         subject,
         html,
       });
-      console.log(`[EmailService] Success via Resend to ${to}`);
       return;
     } catch (resendError) {
-      console.error("[EmailService] Resend delivery failed:", resendError);
-      console.log("[EmailService] Attempting SMTP fallback...");
+      logger.warn("Resend delivery failed, attempting SMTP fallback");
     }
   }
 
   // Final fallback: SMTP
-  console.log(`[EmailService] Final attempt via SMTP to ${to}`);
   return await sendViaSmtp(finalFrom, to, subject, html);
 }
 
@@ -84,14 +75,13 @@ async function sendEmailWithFallback(
  * Helper to send email via SMTP
  */
 async function sendViaSmtp(from: string, to: string, subject: string, html: string) {
-  console.log(`[SMTP] Connecting to ${process.env.SMTP_HOST}:${process.env.SMTP_PORT}...`);
   if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
     throw new Error("SMTP configuration is incomplete.");
   }
 
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
-    port: parseInt(process.env.SMTP_PORT || "587"),
+    port: Number(process.env.SMTP_PORT) || 587,
     secure: process.env.SMTP_SECURE === "true",
     auth: {
       user: process.env.SMTP_USER,
@@ -105,7 +95,6 @@ async function sendViaSmtp(from: string, to: string, subject: string, html: stri
     subject,
     html,
   });
-  console.log(`[SMTP] Success! messageId: ${info.messageId}`);
   return info;
 }
 
@@ -147,17 +136,15 @@ export const sendEmailVerification = action({
     url: v.string(),
   },
   handler: async (ctx, { to, url }) => {
-    console.log(`[Action] sendEmailVerification called for ${to}`);
     try {
       const html = await render(<VerifyEmail url={url} />);
-      console.log("[Action] Template rendered successfully");
       await sendEmailWithFallback(ctx, {
         to,
         subject: "Verify your email address",
         html,
       });
     } catch (error) {
-      console.error("[Action] sendEmailVerification failed:", error);
+      logger.error("Email verification send failed");
       throw error;
     }
   },

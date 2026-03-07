@@ -20,6 +20,7 @@ import type * as emails_templates_ResetPassword from "../emails/templates/ResetP
 import type * as emails_templates_VerifyEmail from "../emails/templates/VerifyEmail.js";
 import type * as emails_templates_VerifyOTP from "../emails/templates/VerifyOTP.js";
 import type * as http from "../http.js";
+import type * as lib_logger from "../lib/logger.js";
 import type * as userPreferences_mutations from "../userPreferences/mutations.js";
 import type * as userPreferences_queries from "../userPreferences/queries.js";
 import type * as userPreferences_upload from "../userPreferences/upload.js";
@@ -43,6 +44,7 @@ declare const fullApi: ApiFromModules<{
   "emails/templates/VerifyEmail": typeof emails_templates_VerifyEmail;
   "emails/templates/VerifyOTP": typeof emails_templates_VerifyOTP;
   http: typeof http;
+  "lib/logger": typeof lib_logger;
   "userPreferences/mutations": typeof userPreferences_mutations;
   "userPreferences/queries": typeof userPreferences_queries;
   "userPreferences/upload": typeof userPreferences_upload;
