@@ -22,7 +22,7 @@ Sendable generates hyper-personalized outreach emails using AI. It automates aud
 - **Smart Follow-ups** - Automated multi-step sequences that keep conversations going
 - **Rich Editor** - Dual Markdown/WYSIWYG editor with inline AI rewrites and version history
 - **Session Management** - Real-time session tracking with browser detection and revocation
-- **Two-Factor Auth** - TOTP-based 2FA with backup codes
+- **Two-Factor Auth** - TOTP-based 2FA with backup codes and email OTP
 
 ---
 
@@ -30,12 +30,13 @@ Sendable generates hyper-personalized outreach emails using AI. It automates aud
 
 | Layer | Technology |
 |-------|-----------|
-| **Framework** | [Next.js 15](https://nextjs.org/) (React 19, App Router) |
+| **Framework** | [Next.js 16](https://nextjs.org/) (React 19, App Router) |
 | **Backend** | [Convex](https://convex.dev/) (real-time database + serverless functions) |
 | **Auth** | [Better Auth](https://better-auth.com/) (email/password, OAuth, 2FA, magic links) |
-| **Email** | [Resend](https://resend.com/) (transactional emails) |
+| **Email** | [Resend](https://resend.com/) + [Nodemailer](https://nodemailer.com/) SMTP fallback |
 | **UI** | [Tailwind CSS v4](https://tailwindcss.com/) + [shadcn/ui](https://ui.shadcn.com/) |
 | **Animations** | [Framer Motion](https://www.framer.com/motion/) |
+| **Logging** | [BetterStack / Logtail](https://betterstack.com/logs) (production) |
 | **Language** | TypeScript (strict mode, full-stack type safety) |
 
 ---
@@ -45,7 +46,7 @@ Sendable generates hyper-personalized outreach emails using AI. It automates aud
 ### Prerequisites
 
 - **Node.js** >= 20.x
-- **pnpm** >= 9.x (recommended) or npm
+- **pnpm** >= 9.x
 - A free [Convex](https://convex.dev/) account
 
 ### 1. Clone & Install
@@ -58,30 +59,13 @@ pnpm install
 
 ### 2. Configure Environment
 
-Create `.env.local` in the project root:
-
-```env
-# Convex
-NEXT_PUBLIC_CONVEX_URL=<your_convex_deployment_url>
-
-# Auth
-BETTER_AUTH_SECRET=<generate_a_random_secret>
-SITE_URL=http://localhost:3000
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
-
-# Email (Resend)
-RESEND_API_KEY=<your_resend_api_key>
-
-# OAuth (optional - commented out in code until configured)
-# GITHUB_CLIENT_ID=
-# GITHUB_CLIENT_SECRET=
-# GOOGLE_CLIENT_ID=
-# GOOGLE_CLIENT_SECRET=
-# SLACK_CLIENT_ID=
-# SLACK_CLIENT_SECRET=
+```bash
+cp .env.example .env.local
 ```
 
-Set the same variables in your [Convex dashboard](https://dashboard.convex.dev/) under Environment Variables.
+Edit `.env.local` with your values. See [Environment Variables](#environment-variables) for details.
+
+Set the same variables in your [Convex dashboard](https://dashboard.convex.dev/) under **Settings > Environment Variables**.
 
 ### 3. Start Development
 
@@ -89,7 +73,7 @@ Set the same variables in your [Convex dashboard](https://dashboard.convex.dev/)
 pnpm dev
 ```
 
-This starts the Next.js dev server and Convex backend simultaneously. Open [http://localhost:3000](http://localhost:3000).
+This starts Next.js + Convex simultaneously. Open [http://localhost:3000](http://localhost:3000).
 
 ---
 
@@ -100,8 +84,11 @@ sendable-ai/
 ├── convex/                       # Backend (Convex serverless)
 │   ├── auth/                     # Auth helpers, queries, mutations
 │   ├── betterAuth/               # Better Auth schema & config
-│   ├── emails/                   # Email templates (React Email)
-│   ├── todos/                    # Example CRUD module
+│   ├── emails/                   # Email service + React Email templates
+│   │   ├── email.tsx             # Send actions (Resend + SMTP fallback)
+│   │   └── templates/            # Email templates (BaseLayout, Verify, Reset, etc.)
+│   ├── lib/                      # Shared backend utilities
+│   │   └── logger.ts             # Logger (console local, BetterStack production)
 │   ├── userPreferences/          # User profile & notification prefs
 │   │   ├── schema.ts
 │   │   ├── queries.ts
@@ -129,6 +116,7 @@ sendable-ai/
 │   │
 │   └── lib/
 │       ├── auth/                 # Auth client (browser) & server helpers
+│       ├── logger.ts             # Frontend logger (dev console, prod silent)
 │       └── utils.ts              # Utility functions
 │
 ├── public/
@@ -144,16 +132,58 @@ sendable-ai/
 ```bash
 pnpm dev              # Start dev server (Next.js + Convex)
 pnpm build            # Production build
-pnpm lint             # ESLint
-pnpm tsc --noEmit     # Type check (frontend)
-pnpm tsc -p convex    # Type check (backend)
+pnpm lint             # ESLint + TypeScript checks
+pnpm format           # Prettier format
+pnpm format:check     # Check formatting
+```
+
+---
+
+## Environment Variables
+
+| Variable | Required | Where | Description |
+|----------|----------|-------|-------------|
+| `CONVEX_DEPLOYMENT` | Yes | `.env.local` | Convex deployment identifier |
+| `NEXT_PUBLIC_CONVEX_URL` | Yes | Both | Convex cloud URL |
+| `NEXT_PUBLIC_CONVEX_SITE_URL` | Yes | Both | Convex HTTP actions URL |
+| `SITE_URL` | Yes | Convex | App URL (used for auth origins and email links) |
+| `NEXT_PUBLIC_SITE_URL` | Yes | `.env.local` | Public app URL |
+| `BETTER_AUTH_SECRET` | Yes | Convex | Auth encryption secret (`openssl rand -base64 32`) |
+| `RESEND_API_KEY` | Yes | Convex | Resend API key for production emails |
+| `EMAIL_PROVIDER` | No | Convex | `"resend"` (default) or `"smtp"` |
+| `SMTP_HOST` | If SMTP | Convex | SMTP server hostname |
+| `SMTP_PORT` | No | Convex | SMTP port (default: `587`) |
+| `SMTP_USER` | If SMTP | Convex | SMTP username |
+| `SMTP_PASS` | If SMTP | Convex | SMTP password |
+| `SMTP_SECURE` | No | Convex | `"true"` for TLS (default: `false`) |
+| `SMTP_FROM_NAME` | No | Convex | Sender name (default: `Sendable`) |
+| `SMTP_FROM_EMAIL` | No | Convex | Sender email (default: `onboarding@resend.dev`) |
+| `RESEND_VERIFIED_RECIPIENT` | No | Convex | Restrict Resend to one email (free tier) |
+| `LOGTAIL_SOURCE_TOKEN` | No | Convex | BetterStack source token for production logging |
+| `GITHUB_CLIENT_ID` | No | Convex | GitHub OAuth client ID |
+| `GITHUB_CLIENT_SECRET` | No | Convex | GitHub OAuth client secret |
+| `GOOGLE_CLIENT_ID` | No | Convex | Google OAuth client ID |
+| `GOOGLE_CLIENT_SECRET` | No | Convex | Google OAuth client secret |
+| `SLACK_CLIENT_ID` | No | Convex | Slack OAuth client ID |
+| `SLACK_CLIENT_SECRET` | No | Convex | Slack OAuth client secret |
+
+**"Both"** = set in both `.env.local` and Convex dashboard. **"Convex"** = Convex dashboard only.
+
+### Email setup for development
+
+For local development, set `EMAIL_PROVIDER=smtp` and use [Mailpit](https://mailpit.axllent.org/) or [Mailtrap](https://mailtrap.io/):
+
+```bash
+# Mailpit (local SMTP catcher)
+SMTP_HOST=localhost
+SMTP_PORT=1025
+SMTP_USER=
+SMTP_PASS=
 ```
 
 ---
 
 ## Authentication
-
-Sendable uses [Better Auth](https://better-auth.com/) integrated with Convex for a full-featured auth system:
 
 | Feature | Status |
 |---------|--------|
@@ -172,12 +202,14 @@ Sendable uses [Better Auth](https://better-auth.com/) integrated with Convex for
 ## Security
 
 - Rate limiting on all auth endpoints (10 requests per 60-second window)
-- Password strength validation with real-time feedback
+- Password strength validation with real-time requirements checklist
 - 2FA disable requires password confirmation
 - Account linking restricted to same-email only
-- OAuth env vars validated at startup (descriptive errors on missing config)
+- User lookup queries require authentication
 - CSRF protection via framework defaults (Convex + Better Auth)
 - File uploads validated for type and size (2MB max, image types only)
+- Structured logging with no PII in production logs (BetterStack)
+- Environment variables validated with descriptive error messages
 
 ---
 
@@ -186,10 +218,9 @@ Sendable uses [Better Auth](https://better-auth.com/) integrated with Convex for
 See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 ```bash
-# Quick start
 git checkout -b feature/your-feature
 # Make changes
-pnpm lint && pnpm tsc --noEmit   # Verify before committing
+pnpm lint              # Verify before committing
 git commit -m "feat: describe your change"
 git push origin feature/your-feature
 # Open a Pull Request
@@ -210,3 +241,4 @@ This project is proprietary. All rights reserved.
 - [shadcn/ui](https://ui.shadcn.com/) - UI components
 - [Next.js](https://nextjs.org/) - React framework
 - [Resend](https://resend.com/) - Email delivery
+- [BetterStack](https://betterstack.com/) - Production logging
