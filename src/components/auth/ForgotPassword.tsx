@@ -72,7 +72,7 @@ export function ForgotPassword({
             </div>
             <h1 className="text-2xl font-bold">Check your email</h1>
             <p className="text-muted-foreground text-sm text-balance">
-              We've sent a password reset link to <strong>{email}</strong>
+              We&apos;ve sent a password reset link to <strong>{email}</strong>
             </p>
             <p className="text-muted-foreground text-sm text-balance">
               Click the link in the email to reset your password. The link will
@@ -112,7 +112,7 @@ export function ForgotPassword({
         <div className="flex flex-col items-center gap-1 text-center">
           <h1 className="text-2xl font-bold">Forgot your password?</h1>
           <p className="text-muted-foreground text-sm text-balance">
-            Enter your email address and we'll send you a link to reset your
+            Enter your email address and we&apos;ll send you a link to reset your
             password.
           </p>
         </div>
@@ -128,7 +128,7 @@ export function ForgotPassword({
             disabled={loading}
           />
           <FieldDescription>
-            We'll send a password reset link to this email address.
+            We&apos;ll send a password reset link to this email address.
           </FieldDescription>
         </Field>
         <Field>

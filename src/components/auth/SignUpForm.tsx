@@ -10,7 +10,8 @@ import {
   FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { PasswordInput } from "@/components/ui/password-input";
+import { useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { authClient } from "@/lib/auth/client";
 import { toast } from "sonner";
@@ -25,6 +26,7 @@ export function SignupForm({
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [loading, setLoading] = useState(false);
+  const passwordRef = useRef<HTMLInputElement>(null);
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,12 +70,12 @@ export function SignupForm({
         <div className="flex flex-col items-center gap-1 text-center">
           <h1 className="text-2xl font-bold">Create your account</h1>
           <p className="text-muted-foreground text-sm text-balance">
-            Join thousands of teams already using Sendable.ai
+            Join thousands of teams already using Sendable
           </p>
         </div>
         <div className="grid grid-cols-2 gap-4">
           <Field>
-            <FieldLabel htmlFor="name">First Name</FieldLabel>
+            <FieldLabel htmlFor="first-name">First Name</FieldLabel>
             <Input
               id="first-name"
               type="text"
@@ -108,37 +110,31 @@ export function SignupForm({
             onChange={(e) => setEmail(e.target.value)}
             disabled={loading}
           />
-          <FieldDescription>
-            We&apos;ll use this to contact you about your account.
-          </FieldDescription>
         </Field>
         <Field>
           <FieldLabel htmlFor="password">Password</FieldLabel>
-          <Input
+          <PasswordInput
+            ref={passwordRef}
             id="password"
-            type="password"
             placeholder="••••••••"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             disabled={loading}
+            showStrength
+            showStrengthOnSubmit
           />
-          <FieldDescription>
-            Must be at least 8 characters long.
-          </FieldDescription>
         </Field>
         <Field>
           <FieldLabel htmlFor="confirm-password">Confirm Password</FieldLabel>
-          <Input
+          <PasswordInput
             id="confirm-password"
-            type="password"
             placeholder="••••••••"
             required
             value={passwordConfirmation}
             onChange={(e) => setPasswordConfirmation(e.target.value)}
             disabled={loading}
           />
-          <FieldDescription>Please confirm your password.</FieldDescription>
         </Field>
         <Field>
           <Button type="submit" disabled={loading} className="w-full">

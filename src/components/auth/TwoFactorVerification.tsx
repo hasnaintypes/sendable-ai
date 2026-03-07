@@ -15,6 +15,7 @@ import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { authClient } from "@/lib/auth/client";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 type VerificationMethod = "totp" | "otp" | "backup";
 
@@ -44,7 +45,7 @@ export default function TwoFactorVerification() {
       });
     } catch (error) {
       console.log("error", error);
-      alert("Failed to verify code. Please try again.");
+      toast.error("Failed to verify code. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -56,7 +57,7 @@ export default function TwoFactorVerification() {
       await authClient.twoFactor.sendOtp();
       setOtpSent(true);
     } catch {
-      alert("Failed to send verification code. Please try again.");
+      toast.error("Failed to send verification code. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -71,7 +72,7 @@ export default function TwoFactorVerification() {
       });
       // Redirect will happen automatically on success
     } catch {
-      alert("Failed to verify code. Please try again.");
+      toast.error("Failed to verify code. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -85,7 +86,7 @@ export default function TwoFactorVerification() {
       });
       // Redirect will happen automatically on success
     } catch {
-      alert("Failed to verify backup code. Please try again.");
+      toast.error("Failed to verify backup code. Please try again.");
     } finally {
       setLoading(false);
     }
