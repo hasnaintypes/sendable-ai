@@ -22,8 +22,12 @@ export function ProfileSection() {
   const user = useQuery(api.auth.queries.getCurrentUser);
   const preferences = useQuery(api.userPreferences.queries.get);
   const upsertPreferences = useMutation(api.userPreferences.mutations.upsert);
-  const generateUploadUrl = useMutation(api.userPreferences.upload.generateUploadUrl);
-  const saveProfileImage = useMutation(api.userPreferences.upload.saveProfileImage);
+  const generateUploadUrl = useMutation(
+    api.userPreferences.upload.generateUploadUrl,
+  );
+  const saveProfileImage = useMutation(
+    api.userPreferences.upload.saveProfileImage,
+  );
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [firstName, setFirstName] = useState("");
@@ -118,7 +122,8 @@ export function ProfileSection() {
     }
   };
 
-  const profileImageUrl = previewUrl || preferences?.profileImage || user?.image || "";
+  const profileImageUrl =
+    previewUrl || preferences?.profileImage || user?.image || "";
 
   const getInitials = (name: string | null | undefined) => {
     if (!name) return "U";
@@ -132,7 +137,6 @@ export function ProfileSection() {
 
   return (
     <div className="w-full space-y-6">
-
       {/* Header */}
       <div>
         <h2 className="text-2xl font-semibold tracking-tight">Profile</h2>
@@ -153,9 +157,7 @@ export function ProfileSection() {
         <CardContent className="flex items-center gap-6">
           <Avatar className="h-20 w-20">
             <AvatarImage src={profileImageUrl} />
-            <AvatarFallback>
-              {getInitials(user?.name)}
-            </AvatarFallback>
+            <AvatarFallback>{getInitials(user?.name)}</AvatarFallback>
           </Avatar>
 
           <div className="space-y-2">
@@ -197,7 +199,6 @@ export function ProfileSection() {
         </CardHeader>
 
         <CardContent className="space-y-5">
-
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="firstName">First name</Label>
@@ -244,7 +245,6 @@ export function ProfileSection() {
               onChange={(e) => setPhone(e.target.value)}
             />
           </div>
-
         </CardContent>
       </Card>
 
@@ -252,13 +252,10 @@ export function ProfileSection() {
       <Card>
         <CardHeader>
           <CardTitle>Work Information</CardTitle>
-          <CardDescription>
-            Details about your organization
-          </CardDescription>
+          <CardDescription>Details about your organization</CardDescription>
         </CardHeader>
 
         <CardContent className="space-y-5">
-
           <div className="space-y-2">
             <Label htmlFor="company">Company</Label>
             <Input
@@ -278,7 +275,6 @@ export function ProfileSection() {
               onChange={(e) => setJobTitle(e.target.value)}
             />
           </div>
-
         </CardContent>
       </Card>
 
@@ -299,7 +295,6 @@ export function ProfileSection() {
           )}
         </Button>
       </div>
-
     </div>
   );
 }

@@ -23,7 +23,10 @@ interface ChangeEmailDialogProps {
 
 type Step = "password" | "email" | "sent";
 
-export function ChangeEmailDialog({ open, onOpenChange }: ChangeEmailDialogProps) {
+export function ChangeEmailDialog({
+  open,
+  onOpenChange,
+}: ChangeEmailDialogProps) {
   const [step, setStep] = useState<Step>("password");
   const [password, setPassword] = useState("");
   const [newEmail, setNewEmail] = useState("");
@@ -90,7 +93,10 @@ export function ChangeEmailDialog({ open, onOpenChange }: ChangeEmailDialogProps
               <Button variant="outline" onClick={() => handleOpenChange(false)}>
                 Cancel
               </Button>
-              <Button onClick={handleVerifyPassword} disabled={!password.trim()}>
+              <Button
+                onClick={handleVerifyPassword}
+                disabled={!password.trim()}
+              >
                 Continue
               </Button>
             </DialogFooter>
@@ -122,7 +128,10 @@ export function ChangeEmailDialog({ open, onOpenChange }: ChangeEmailDialogProps
               <Button variant="outline" onClick={() => setStep("password")}>
                 Back
               </Button>
-              <Button onClick={handleChangeEmail} disabled={loading || !newEmail.trim()}>
+              <Button
+                onClick={handleChangeEmail}
+                disabled={loading || !newEmail.trim()}
+              >
                 {loading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
                 Send Verification
               </Button>
@@ -140,7 +149,8 @@ export function ChangeEmailDialog({ open, onOpenChange }: ChangeEmailDialogProps
                 <div>
                   <DialogTitle>Verification Sent</DialogTitle>
                   <DialogDescription>
-                    Check your inbox at <strong>{newEmail}</strong> and click the verification link.
+                    Check your inbox at <strong>{newEmail}</strong> and click
+                    the verification link.
                   </DialogDescription>
                 </div>
               </div>

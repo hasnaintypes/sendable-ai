@@ -23,7 +23,7 @@ function requireEnv(name: string): string {
   if (!value) {
     throw new Error(
       `Missing required environment variable: ${name}. ` +
-      `Please set it in your Convex dashboard or .env file.`
+        `Please set it in your Convex dashboard or .env file.`,
     );
   }
   return value;
@@ -40,9 +40,13 @@ export const authComponent = createClient<DataModel, typeof authSchema>(
 );
 
 export const createAuthOptions = (ctx: GenericCtx<DataModel>) => {
-  const finalSiteUrl = (process.env.SITE_URL || process.env.BETTER_AUTH_URL || "http://localhost:3000") as string;
+  const finalSiteUrl = (process.env.SITE_URL ||
+    process.env.BETTER_AUTH_URL ||
+    "http://localhost:3000") as string;
   if (!process.env.SITE_URL && !process.env.BETTER_AUTH_URL) {
-    logger.warn("SITE_URL or BETTER_AUTH_URL is not set — this will cause INVALID_ORIGIN errors");
+    logger.warn(
+      "SITE_URL or BETTER_AUTH_URL is not set — this will cause INVALID_ORIGIN errors",
+    );
   }
   return {
     baseURL: finalSiteUrl,
@@ -63,24 +67,34 @@ export const createAuthOptions = (ctx: GenericCtx<DataModel>) => {
     emailVerification: {
       sendVerificationEmail: async ({ user, url }) => {
         // Ensure the URL uses the correct protocol and path
-        const verificationUrl = url.replace("http://localhost:3000", finalSiteUrl)
+        const verificationUrl = url
+          .replace("http://localhost:3000", finalSiteUrl)
           .replace("/api/auth/verify-email", "/verify-email");
 
-        await requireActionCtx(ctx).runAction(api.emails.email.sendEmailVerification, {
-          to: user.email,
-          url: verificationUrl,
-        });
+        await requireActionCtx(ctx).runAction(
+          api.emails.email.sendEmailVerification,
+          {
+            to: user.email,
+            url: verificationUrl,
+          },
+        );
       },
     },
     emailAndPassword: {
       enabled: true,
       requireEmailVerification: true,
       sendResetPassword: async ({ user, url }) => {
-        const resetPasswordUrl = url.replace("http://localhost:3000", finalSiteUrl);
-        await requireActionCtx(ctx).runAction(api.emails.email.sendResetPassword, {
-          to: user.email,
-          url: resetPasswordUrl,
-        });
+        const resetPasswordUrl = url.replace(
+          "http://localhost:3000",
+          finalSiteUrl,
+        );
+        await requireActionCtx(ctx).runAction(
+          api.emails.email.sendResetPassword,
+          {
+            to: user.email,
+            url: resetPasswordUrl,
+          },
+        );
       },
     },
     // TODO: Uncomment social providers once OAuth env vars are configured
@@ -112,19 +126,28 @@ export const createAuthOptions = (ctx: GenericCtx<DataModel>) => {
       username(),
       magicLink({
         sendMagicLink: async ({ email, url }) => {
-          const magicLinkUrl = url.replace("http://localhost:3000", finalSiteUrl);
-          await requireActionCtx(ctx).runAction(api.emails.email.sendMagicLink, {
-            to: email,
-            url: magicLinkUrl,
-          });
+          const magicLinkUrl = url.replace(
+            "http://localhost:3000",
+            finalSiteUrl,
+          );
+          await requireActionCtx(ctx).runAction(
+            api.emails.email.sendMagicLink,
+            {
+              to: email,
+              url: magicLinkUrl,
+            },
+          );
         },
       }),
       emailOTP({
         async sendVerificationOTP({ email, otp }) {
-          await requireActionCtx(ctx).runAction(api.emails.email.sendOTPVerification, {
-            to: email,
-            code: otp,
-          });
+          await requireActionCtx(ctx).runAction(
+            api.emails.email.sendOTPVerification,
+            {
+              to: email,
+              code: otp,
+            },
+          );
         },
       }),
       twoFactor(),

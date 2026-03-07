@@ -38,7 +38,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
             <TooltipProvider>
               {children}
               <Toaster />
-            </TooltipProvider> 
+            </TooltipProvider>
           </ThemeProvider>
         </ConvexClientProvider>
       </body>

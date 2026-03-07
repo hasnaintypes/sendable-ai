@@ -7,7 +7,14 @@ import { DeleteAccountDialog } from "@/components/dialogs/DeleteAccountDialog";
 import { TwoFactorSetupDialog } from "@/components/dialogs/TwoFactorSetupDialog";
 import { ChangeEmailDialog } from "@/components/dialogs/ChangeEmailDialog";
 import { useState, useEffect, useCallback } from "react";
-import { Loader2, AlertTriangle, Key, Smartphone, Mail, Monitor } from "lucide-react";
+import {
+  Loader2,
+  AlertTriangle,
+  Key,
+  Smartphone,
+  Mail,
+  Monitor,
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth/client";
 import { useRouter } from "next/navigation";
@@ -89,7 +96,9 @@ export function SecuritySection() {
   const [loading, setLoading] = useState<string | null>(null);
   const [twoFactorDialogOpen, setTwoFactorDialogOpen] = useState(false);
   const [sessions, setSessions] = useState<Session[]>([]);
-  const [currentSessionToken, setCurrentSessionToken] = useState<string | null>(null);
+  const [currentSessionToken, setCurrentSessionToken] = useState<string | null>(
+    null,
+  );
 
   const fetchSessions = useCallback(async () => {
     try {
@@ -210,7 +219,6 @@ export function SecuritySection() {
 
   return (
     <div className="space-y-6">
-
       {/* Header */}
       <div>
         <h2 className="text-2xl font-semibold tracking-tight">Security</h2>
@@ -220,11 +228,9 @@ export function SecuritySection() {
       </div>
 
       <div className="rounded-lg border bg-background">
-
         {/* 2FA */}
         <div className="flex items-center justify-between p-5">
           <div className="flex items-start gap-4">
-
             <div className="flex h-9 w-9 items-center justify-center rounded-md bg-muted">
               <Smartphone className="h-5 w-5 text-primary" />
             </div>
@@ -241,18 +247,13 @@ export function SecuritySection() {
                 Add an extra verification step when signing in.
               </p>
             </div>
-
           </div>
 
           <div className="flex gap-2">
             <TwoFactorSetupDialog
               open={twoFactorDialogOpen}
               onOpenChange={setTwoFactorDialogOpen}
-              trigger={
-                <Button size="sm">
-                  Enable
-                </Button>
-              }
+              trigger={<Button size="sm">Enable</Button>}
             />
 
             <Button
@@ -279,11 +280,24 @@ export function SecuritySection() {
               className="max-w-xs"
               onKeyDown={(e) => e.key === "Enter" && handleDisable2FA()}
             />
-            <Button size="sm" onClick={handleDisable2FA} disabled={loading === "2fa"}>
-              {loading === "2fa" && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+            <Button
+              size="sm"
+              onClick={handleDisable2FA}
+              disabled={loading === "2fa"}
+            >
+              {loading === "2fa" && (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              )}
               Confirm
             </Button>
-            <Button size="sm" variant="ghost" onClick={() => { setShow2FAPrompt(false); setDisable2FAPassword(""); }}>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => {
+                setShow2FAPrompt(false);
+                setDisable2FAPassword("");
+              }}
+            >
               Cancel
             </Button>
           </div>
@@ -294,7 +308,6 @@ export function SecuritySection() {
         {/* Password */}
         <div className="flex items-center justify-between p-5">
           <div className="flex items-start gap-4">
-
             <div className="flex h-9 w-9 items-center justify-center rounded-md bg-muted">
               <Key className="h-5 w-5 text-primary" />
             </div>
@@ -305,7 +318,6 @@ export function SecuritySection() {
                 Reset your password via email.
               </p>
             </div>
-
           </div>
 
           <Button
@@ -326,7 +338,6 @@ export function SecuritySection() {
         {/* Email */}
         <div className="flex items-center justify-between p-5">
           <div className="flex items-start gap-4">
-
             <div className="flex h-9 w-9 items-center justify-center rounded-md bg-muted">
               <Mail className="h-5 w-5 text-primary" />
             </div>
@@ -337,7 +348,6 @@ export function SecuritySection() {
                 Update your email address for account access.
               </p>
             </div>
-
           </div>
 
           <Button
@@ -348,10 +358,12 @@ export function SecuritySection() {
             Change Email
           </Button>
         </div>
-
       </div>
 
-      <ChangeEmailDialog open={changeEmailOpen} onOpenChange={setChangeEmailOpen} />
+      <ChangeEmailDialog
+        open={changeEmailOpen}
+        onOpenChange={setChangeEmailOpen}
+      />
 
       {/* Sessions */}
       <div className="space-y-4">
@@ -385,7 +397,9 @@ export function SecuritySection() {
                 </div>
 
                 <div>
-                  <p className="font-medium">{parseUserAgent(currentSession.userAgent)}</p>
+                  <p className="font-medium">
+                    {parseUserAgent(currentSession.userAgent)}
+                  </p>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Badge variant="secondary" className="text-xs">
                       Current session
@@ -407,7 +421,8 @@ export function SecuritySection() {
               <Separator />
               <div className="p-5 space-y-4">
                 <p className="text-sm font-medium text-muted-foreground">
-                  {otherSessions.length} other {otherSessions.length === 1 ? "session" : "sessions"}
+                  {otherSessions.length} other{" "}
+                  {otherSessions.length === 1 ? "session" : "sessions"}
                 </p>
 
                 {visibleOtherSessions.map((session, index) => {
@@ -423,15 +438,25 @@ export function SecuritySection() {
 
                           <div>
                             <div className="flex items-center gap-2">
-                              <p className="font-medium">{parseUserAgent(session.userAgent)}</p>
+                              <p className="font-medium">
+                                {parseUserAgent(session.userAgent)}
+                              </p>
                               {expired && (
-                                <Badge variant="outline" className="text-xs text-muted-foreground">
+                                <Badge
+                                  variant="outline"
+                                  className="text-xs text-muted-foreground"
+                                >
                                   Expired
                                 </Badge>
                               )}
                             </div>
                             <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                              <span>Last active {new Date(session.updatedAt).toLocaleDateString()}</span>
+                              <span>
+                                Last active{" "}
+                                {new Date(
+                                  session.updatedAt,
+                                ).toLocaleDateString()}
+                              </span>
                               {session.ipAddress && (
                                 <>
                                   <span>&#183;</span>
@@ -487,11 +512,8 @@ export function SecuritySection() {
 
       {/* Danger Zone */}
       <div className="rounded-lg border border-destructive/30">
-
         <div className="p-5 flex items-start justify-between">
-
           <div className="flex gap-4">
-
             <div className="flex h-9 w-9 items-center justify-center rounded-md bg-destructive/10">
               <AlertTriangle className="h-5 w-5 text-destructive" />
             </div>
@@ -502,13 +524,10 @@ export function SecuritySection() {
                 Permanently remove your account and all data.
               </p>
             </div>
-
           </div>
 
           <DeleteAccountDialog onConfirm={handleDeleteAccount} />
-
         </div>
-
       </div>
     </div>
   );

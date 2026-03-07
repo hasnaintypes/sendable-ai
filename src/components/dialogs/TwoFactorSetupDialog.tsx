@@ -158,8 +158,8 @@ export function TwoFactorSetupDialog({
             <DialogHeader>
               <DialogTitle>Setup Authenticator App</DialogTitle>
               <DialogDescription>
-                Each time you log in, in addition to your password, you&apos;ll use an
-                authenticator app to generate a one-time code.
+                Each time you log in, in addition to your password, you&apos;ll
+                use an authenticator app to generate a one-time code.
               </DialogDescription>
             </DialogHeader>
 
@@ -173,8 +173,8 @@ export function TwoFactorSetupDialog({
                   <p className="text-sm font-semibold">Scan QR code</p>
                 </div>
                 <p className="text-sm text-muted-foreground pl-7">
-                  Scan the QR code below or manually enter the secret key into your
-                  authenticator app.
+                  Scan the QR code below or manually enter the secret key into
+                  your authenticator app.
                 </p>
 
                 {totpUri && (
@@ -259,7 +259,10 @@ export function TwoFactorSetupDialog({
               >
                 Cancel
               </Button>
-              <Button onClick={handleVerifyCode} disabled={loading || code.length !== 6}>
+              <Button
+                onClick={handleVerifyCode}
+                disabled={loading || code.length !== 6}
+              >
                 {loading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
                 Confirm
               </Button>

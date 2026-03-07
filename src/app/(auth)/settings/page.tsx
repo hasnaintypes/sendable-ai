@@ -72,7 +72,11 @@ export default function SettingsPage() {
       </div>
 
       <div className="flex-1 w-full px-6 py-4">
-        <Tabs defaultValue="profile" orientation="vertical" className="flex gap-8">
+        <Tabs
+          defaultValue="profile"
+          orientation="vertical"
+          className="flex gap-8"
+        >
           <TabsList className="flex flex-col h-fit w-52 shrink-0 bg-transparent gap-1 p-0 items-stretch sticky top-6 self-start">
             {tabs.map((tab) => {
               const Icon = tab.icon;

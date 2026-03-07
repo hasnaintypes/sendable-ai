@@ -44,7 +44,8 @@ export default function TwoFactorVerification() {
           },
           onError: (ctx) => {
             setLoading(false);
-            const message = ctx?.error?.message || "Failed to verify code. Please try again.";
+            const message =
+              ctx?.error?.message || "Failed to verify code. Please try again.";
             toast.error(message);
           },
         },

@@ -48,7 +48,9 @@ export function SignInForm({
         },
         onError: (ctx) => {
           setLoading(false);
-          const message = ctx?.error?.message || "Failed to sign in. Please check your credentials.";
+          const message =
+            ctx?.error?.message ||
+            "Failed to sign in. Please check your credentials.";
           toast.error(message);
         },
       },

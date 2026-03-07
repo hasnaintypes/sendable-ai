@@ -35,7 +35,13 @@ const itemVariants: Variants = {
   },
 };
 
-function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
+function AnimatedCounter({
+  target,
+  suffix = "",
+}: {
+  target: number;
+  suffix?: string;
+}) {
   const [count, setCount] = useState(0);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
@@ -66,12 +72,21 @@ function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: str
   );
 }
 
-function AnimatedProgress({ value, delay = 0 }: { value: number; delay?: number }) {
+function AnimatedProgress({
+  value,
+  delay = 0,
+}: {
+  value: number;
+  delay?: number;
+}) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
 
   return (
-    <div ref={ref} className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
+    <div
+      ref={ref}
+      className="h-1.5 w-full rounded-full bg-muted overflow-hidden"
+    >
       <motion.div
         className="h-full rounded-full bg-primary"
         initial={{ width: 0 }}
@@ -160,7 +175,10 @@ export function BentoGrid() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <Badge variant="secondary" className="mb-4 px-4 py-1.5 text-sm font-medium">
+          <Badge
+            variant="secondary"
+            className="mb-4 px-4 py-1.5 text-sm font-medium"
+          >
             <Zap className="w-3.5 h-3.5 mr-1.5" />
             Features
           </Badge>
@@ -171,7 +189,8 @@ export function BentoGrid() {
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
             Write emails that get replies, not ignored. Sendable researches your
-            prospects, crafts personalized messages, and follows up automatically.
+            prospects, crafts personalized messages, and follows up
+            automatically.
           </p>
         </motion.div>
 
@@ -199,7 +218,8 @@ export function BentoGrid() {
                   </h3>
                   <p className="text-muted-foreground text-sm max-w-md">
                     One click. Fully personalized email. Subject lines that get
-                    opened, body copy that resonates, and CTAs that drive action.
+                    opened, body copy that resonates, and CTAs that drive
+                    action.
                   </p>
                 </div>
                 <div className="hidden sm:flex items-center justify-center w-10 h-10 rounded-full bg-muted group-hover:bg-primary/10 transition-colors">
@@ -217,9 +237,14 @@ export function BentoGrid() {
                 ].map((metric) => (
                   <div key={metric.label}>
                     <div className="text-2xl font-bold text-foreground mb-0.5">
-                      <AnimatedCounter target={metric.value} suffix={metric.suffix} />
+                      <AnimatedCounter
+                        target={metric.value}
+                        suffix={metric.suffix}
+                      />
                     </div>
-                    <div className="text-xs text-muted-foreground">{metric.label}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {metric.label}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -250,7 +275,9 @@ export function BentoGrid() {
                 <div key={item.label}>
                   <div className="flex justify-between text-xs mb-1">
                     <span className="text-muted-foreground">{item.label}</span>
-                    <span className="text-foreground font-medium">{item.value}%</span>
+                    <span className="text-foreground font-medium">
+                      {item.value}%
+                    </span>
                   </div>
                   <AnimatedProgress value={item.value} delay={i * 0.15} />
                 </div>
@@ -276,7 +303,9 @@ export function BentoGrid() {
             <div className="rounded-lg bg-muted/50 border border-border/50 p-3">
               <div className="flex items-center gap-2 mb-2">
                 <BarChart3 className="w-4 h-4 text-primary" />
-                <span className="text-xs font-medium text-foreground">Discovery Rate</span>
+                <span className="text-xs font-medium text-foreground">
+                  Discovery Rate
+                </span>
               </div>
               <AnimatedChart />
             </div>
@@ -307,7 +336,7 @@ export function BentoGrid() {
                     <div className="w-1.5 h-1.5 rounded-full bg-primary" />
                     <span className="text-muted-foreground">{feature}</span>
                   </div>
-                )
+                ),
               )}
             </div>
           </motion.div>
@@ -324,8 +353,8 @@ export function BentoGrid() {
               Smart Follow-ups
             </h3>
             <p className="text-muted-foreground text-sm mb-4">
-              Never let a lead go cold. Automated sequences keep the conversation
-              going until you get the reply.
+              Never let a lead go cold. Automated sequences keep the
+              conversation going until you get the reply.
             </p>
             {/* Sequence visualization */}
             <div className="flex items-center gap-1.5">

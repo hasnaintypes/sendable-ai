@@ -25,7 +25,11 @@ const logo = (
   </div>
 );
 
-export default async function DocsLayout({ children }: { children: ReactNode }) {
+export default async function DocsLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
   const pageMap = await getPageMap("/docs");
 
   return (

@@ -33,8 +33,8 @@ export default function NotFound() {
             Page Not Found
           </h2>
           <p className="text-lg text-muted-foreground">
-            Looks like this page took a wrong turn. Don&apos;t worry, let&apos;s get you
-            back on track.
+            Looks like this page took a wrong turn. Don&apos;t worry, let&apos;s
+            get you back on track.
           </p>
         </motion.div>
 

@@ -121,8 +121,11 @@ export function DeleteAccountDialog({
                 disabled={isDeleting}
                 className={cn(
                   "transition-colors",
-                  isTyping && !isValid && "border-destructive/50 focus-visible:ring-destructive/20",
-                  isValid && "border-green-500/50 focus-visible:ring-green-500/20"
+                  isTyping &&
+                    !isValid &&
+                    "border-destructive/50 focus-visible:ring-destructive/20",
+                  isValid &&
+                    "border-green-500/50 focus-visible:ring-green-500/20",
                 )}
                 autoComplete="off"
               />
@@ -131,9 +134,7 @@ export function DeleteAccountDialog({
         )}
 
         <AlertDialogFooter className="gap-2 sm:gap-2">
-          <AlertDialogCancel disabled={isDeleting}>
-            Cancel
-          </AlertDialogCancel>
+          <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
 
           <AlertDialogAction
             disabled={!canDelete || isDeleting}

@@ -55,7 +55,9 @@ export function SignupForm({
         },
         onError: async (ctx) => {
           setLoading(false);
-          const message = ctx?.error?.message || "Failed to create account. Please check your details.";
+          const message =
+            ctx?.error?.message ||
+            "Failed to create account. Please check your details.";
           toast.error(message);
         },
       },
@@ -80,7 +82,8 @@ export function SignupForm({
               We&apos;ve sent a verification link to <strong>{email}</strong>
             </p>
             <p className="text-muted-foreground text-sm text-balance">
-              Click the link in the email to verify your account and get started.
+              Click the link in the email to verify your account and get
+              started.
             </p>
           </div>
           <Field>

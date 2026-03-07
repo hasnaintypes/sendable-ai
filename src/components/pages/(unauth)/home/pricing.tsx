@@ -98,7 +98,9 @@ export function Pricing() {
             <button
               onClick={() => setBillingCycle("monthly")}
               className={`relative px-4 py-2 text-sm font-medium rounded-full transition-colors ${
-                billingCycle === "monthly" ? "text-foreground" : "text-muted-foreground"
+                billingCycle === "monthly"
+                  ? "text-foreground"
+                  : "text-muted-foreground"
               }`}
             >
               {billingCycle === "monthly" && (
@@ -113,7 +115,9 @@ export function Pricing() {
             <button
               onClick={() => setBillingCycle("yearly")}
               className={`relative px-4 py-2 text-sm font-medium rounded-full transition-colors ${
-                billingCycle === "yearly" ? "text-foreground" : "text-muted-foreground"
+                billingCycle === "yearly"
+                  ? "text-foreground"
+                  : "text-muted-foreground"
               }`}
             >
               {billingCycle === "yearly" && (
@@ -162,7 +166,9 @@ export function Pricing() {
                 <h3 className="text-xl font-semibold text-foreground mb-2">
                   {plan.name}
                 </h3>
-                <p className="text-muted-foreground text-sm">{plan.description}</p>
+                <p className="text-muted-foreground text-sm">
+                  {plan.description}
+                </p>
               </div>
 
               <div className="mb-6">
@@ -171,7 +177,9 @@ export function Pricing() {
                     ${plan.price[billingCycle]}
                   </span>
                   {plan.price.monthly > 0 && (
-                    <span className="text-muted-foreground text-sm">/month</span>
+                    <span className="text-muted-foreground text-sm">
+                      /month
+                    </span>
                   )}
                 </div>
                 {billingCycle === "yearly" && plan.price.yearly > 0 && (

@@ -36,7 +36,7 @@ export function Logo({
       <div
         className={cn(
           "flex items-center justify-center rounded-lg overflow-hidden shrink-0",
-          container
+          container,
         )}
       >
         <Image
@@ -55,7 +55,7 @@ export function Logo({
                 "truncate font-semibold text-foreground",
                 size === "lg" && "text-lg",
                 size === "sm" && "text-sm",
-                titleClassName
+                titleClassName,
               )}
             >
               Sendable
@@ -65,7 +65,7 @@ export function Logo({
             <span
               className={cn(
                 "truncate text-xs text-muted-foreground",
-                subtitleClassName
+                subtitleClassName,
               )}
             >
               {subtitle}

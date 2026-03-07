@@ -51,7 +51,11 @@ async function getLogtail() {
   }
 }
 
-function formatMessage(level: LogLevel, message: string, context?: LogContext): string {
+function formatMessage(
+  level: LogLevel,
+  message: string,
+  context?: LogContext,
+): string {
   const timestamp = new Date().toISOString();
   const ctx = context ? ` ${JSON.stringify(context)}` : "";
   return `[${timestamp}] [${level.toUpperCase()}] ${message}${ctx}`;

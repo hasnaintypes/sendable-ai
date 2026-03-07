@@ -39,7 +39,9 @@ export function Footer() {
               <Sun className="h-3.5 w-3.5 text-muted-foreground" />
               <Switch
                 checked={theme === "dark"}
-                onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
+                onCheckedChange={(checked) =>
+                  setTheme(checked ? "dark" : "light")
+                }
                 aria-label="Toggle dark mode"
               />
               <Moon className="h-3.5 w-3.5 text-muted-foreground" />
@@ -49,7 +51,9 @@ export function Footer() {
           {/* Links */}
           {Object.entries(footerLinks).map(([title, links]) => (
             <div key={title}>
-              <h4 className="text-sm font-semibold text-foreground mb-4">{title}</h4>
+              <h4 className="text-sm font-semibold text-foreground mb-4">
+                {title}
+              </h4>
               <ul className="space-y-3">
                 {links.map((link) => (
                   <li key={link}>

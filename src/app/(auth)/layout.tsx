@@ -9,7 +9,8 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Dashboard | Sendable",
-  description: "Manage your cold email outreach campaigns with AI-powered automation",
+  description:
+    "Manage your cold email outreach campaigns with AI-powered automation",
 };
 
 export default async function Layout({ children }: PropsWithChildren) {
@@ -17,7 +18,9 @@ export default async function Layout({ children }: PropsWithChildren) {
     redirect("/sign-in");
   }
 
-  const preloadedUserQuery = await preloadAuthQuery(api.auth.queries.getCurrentUser);
+  const preloadedUserQuery = await preloadAuthQuery(
+    api.auth.queries.getCurrentUser,
+  );
 
   return (
     <SidebarProvider>

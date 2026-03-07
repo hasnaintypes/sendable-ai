@@ -12,7 +12,15 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { useState, useEffect } from "react";
-import { Bell, Loader2, Mail, TrendingUp, Calendar, Shield, Megaphone } from "lucide-react";
+import {
+  Bell,
+  Loader2,
+  Mail,
+  TrendingUp,
+  Calendar,
+  Shield,
+  Megaphone,
+} from "lucide-react";
 import { toast } from "sonner";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
@@ -28,7 +36,9 @@ const defaults = {
 
 export function NotificationSection() {
   const preferences = useQuery(api.userPreferences.queries.get);
-  const updateNotifications = useMutation(api.userPreferences.mutations.updateNotifications);
+  const updateNotifications = useMutation(
+    api.userPreferences.mutations.updateNotifications,
+  );
   const [loading, setLoading] = useState(false);
   const [notifications, setNotifications] = useState(defaults);
 
@@ -36,11 +46,16 @@ export function NotificationSection() {
     if (preferences) {
       setNotifications({
         emailReplies: preferences.notifyEmailReplies ?? defaults.emailReplies,
-        campaignUpdates: preferences.notifyCampaignUpdates ?? defaults.campaignUpdates,
-        leadEngagement: preferences.notifyLeadEngagement ?? defaults.leadEngagement,
-        weeklyReports: preferences.notifyWeeklyReports ?? defaults.weeklyReports,
-        securityAlerts: preferences.notifySecurityAlerts ?? defaults.securityAlerts,
-        productUpdates: preferences.notifyProductUpdates ?? defaults.productUpdates,
+        campaignUpdates:
+          preferences.notifyCampaignUpdates ?? defaults.campaignUpdates,
+        leadEngagement:
+          preferences.notifyLeadEngagement ?? defaults.leadEngagement,
+        weeklyReports:
+          preferences.notifyWeeklyReports ?? defaults.weeklyReports,
+        securityAlerts:
+          preferences.notifySecurityAlerts ?? defaults.securityAlerts,
+        productUpdates:
+          preferences.notifyProductUpdates ?? defaults.productUpdates,
       });
     }
   }, [preferences]);
@@ -85,7 +100,8 @@ export function NotificationSection() {
       id: "campaignUpdates",
       icon: TrendingUp,
       label: "Campaign Updates",
-      description: "Receive updates on campaign performance metrics and status changes",
+      description:
+        "Receive updates on campaign performance metrics and status changes",
       enabled: notifications.campaignUpdates,
     },
     {
@@ -145,7 +161,7 @@ export function NotificationSection() {
             return (
               <div
                 key={notification.id}
-                className={`flex items-start justify-between gap-4 py-4 ${index !== notificationGroups.length - 1 ? 'border-b' : ''}`}
+                className={`flex items-start justify-between gap-4 py-4 ${index !== notificationGroups.length - 1 ? "border-b" : ""}`}
               >
                 <div className="flex items-start gap-4 flex-1">
                   <div className="p-2 rounded-lg bg-primary/10">
@@ -169,7 +185,11 @@ export function NotificationSection() {
                 </div>
                 <Switch
                   checked={notification.enabled}
-                  onCheckedChange={() => toggleNotification(notification.id as keyof typeof notifications)}
+                  onCheckedChange={() =>
+                    toggleNotification(
+                      notification.id as keyof typeof notifications,
+                    )
+                  }
                 />
               </div>
             );

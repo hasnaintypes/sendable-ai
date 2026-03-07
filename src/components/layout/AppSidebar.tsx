@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
   LayoutDashboard,
   Users,
@@ -12,8 +12,8 @@ import {
   ChevronDown,
   LifeBuoy,
   Send,
-} from "lucide-react"
-import { Logo } from "@/components/shared/Logo"
+} from "lucide-react";
+import { Logo } from "@/components/shared/Logo";
 
 import {
   Sidebar,
@@ -28,12 +28,12 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from "@/components/ui/collapsible";
 
 const data = {
   navMain: [
@@ -145,18 +145,21 @@ const data = {
       icon: Send,
     },
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const [openItems, setOpenItems] = React.useState<string[]>(["Leads", "Campaigns"])
+  const [openItems, setOpenItems] = React.useState<string[]>([
+    "Leads",
+    "Campaigns",
+  ]);
 
   const toggleItem = (title: string) => {
     setOpenItems((prev) =>
       prev.includes(title)
         ? prev.filter((item) => item !== title)
-        : [...prev, title]
-    )
-  }
+        : [...prev, title],
+    );
+  };
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -248,5 +251,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-  )
+  );
 }
