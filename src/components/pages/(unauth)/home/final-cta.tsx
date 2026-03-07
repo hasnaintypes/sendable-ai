@@ -22,7 +22,7 @@ export function FinalCTA() {
           Ready to scale your outreach?
         </h2>
         <p className="text-lg sm:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
-          Join hundreds of sales teams and recruiters using sendable.ai. Start
+          Join hundreds of sales teams and recruiters using Sendable. Start
           free, no credit card required.
         </p>
 

@@ -39,12 +39,12 @@ export function ForgotPassword({
       });
       setSubmitted(true);
       toast.success("Check your email for the password reset link!");
-    } catch (error: any) {
-      console.error("Forgot password error:", error);
-      toast.error(
-        error?.message ||
-          "Failed to send reset password link. Please try again.",
-      );
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Failed to send reset password link. Please try again.";
+      toast.error(message);
     } finally {
       setLoading(false);
     }

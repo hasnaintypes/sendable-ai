@@ -16,6 +16,7 @@ import { Loader2 } from "lucide-react";
 import { authClient } from "@/lib/auth/client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import logger from "@/lib/logger";
 
 type VerificationMethod = "totp" | "otp" | "backup";
 
@@ -43,14 +44,12 @@ export default function TwoFactorVerification() {
           },
           onError: (ctx) => {
             setLoading(false);
-            console.error("TOTP verify error:", ctx?.error);
             const message = ctx?.error?.message || "Failed to verify code. Please try again.";
             toast.error(message);
           },
         },
       });
-    } catch (error) {
-      console.log("error", error);
+    } catch {
       toast.error("Failed to verify code. Please try again.");
     } finally {
       setLoading(false);
