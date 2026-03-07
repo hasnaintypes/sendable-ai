@@ -2,9 +2,10 @@
 
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { Menu, X, Send } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Logo } from "@/components/shared/Logo";
 
 const navItems = [
   { label: "Features", href: "#features" },
@@ -27,17 +28,10 @@ export function Navbar() {
     >
       <nav
         ref={navRef}
-        className="relative flex items-center justify-between px-4 py-3 rounded-full bg-zinc-900/40 backdrop-blur-md border border-zinc-800"
+        className="relative flex items-center justify-between px-4 py-3 rounded-full bg-card border border-border shadow-lg"
       >
         {/* Logo */}
-        <a href="#" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center">
-            <Send className="w-4 h-4 text-black" strokeWidth={2.5} />
-          </div>
-          <span className="font-semibold text-white hidden sm:block">
-            Sendable.ai
-          </span>
-        </a>
+        <Logo href="/" showTitle titleClassName="hidden sm:block" />
 
         {/* Desktop Nav Items */}
         <div className="hidden md:flex items-center gap-1 relative">
@@ -45,14 +39,14 @@ export function Navbar() {
             <a
               key={item.label}
               href={item.href}
-              className="relative px-4 py-2 text-sm text-zinc-400 hover:text-white transition-colors cursor-pointer"
+              className="relative px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
             >
               {hoveredIndex === index && (
                 <motion.div
                   layoutId="navbar-hover"
-                  className="absolute inset-0 bg-zinc-800 rounded-full"
+                  className="absolute inset-0 bg-accent rounded-full"
                   initial={false}
                   transition={{ type: "spring", stiffness: 500, damping: 30 }}
                 />
@@ -68,7 +62,7 @@ export function Navbar() {
             <Button
               variant="ghost"
               size="sm"
-              className="text-zinc-400 hover:text-white hover:bg-zinc-800"
+              className="text-muted-foreground hover:text-foreground hover:bg-accent"
             >
               Sign In
             </Button>
@@ -76,7 +70,7 @@ export function Navbar() {
           <Link href="/sign-up">
             <Button
               size="sm"
-              className="shimmer-btn bg-white text-zinc-950 hover:bg-zinc-200 rounded-full px-4"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-4"
             >
               Get Started
             </Button>
@@ -85,7 +79,7 @@ export function Navbar() {
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden p-2 text-zinc-400 hover:text-white cursor-pointer"
+          className="md:hidden p-2 text-muted-foreground hover:text-foreground cursor-pointer"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="Toggle menu"
         >
@@ -99,30 +93,30 @@ export function Navbar() {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
-          className="absolute top-full left-0 right-0 mt-2 p-4 rounded-2xl bg-zinc-900/95 backdrop-blur-md border border-zinc-800"
+          className="absolute top-full left-0 right-0 mt-2 p-4 rounded-2xl bg-card border border-border shadow-lg"
         >
           <div className="flex flex-col gap-2">
             {navItems.map((item) => (
               <a
                 key={item.label}
                 href={item.href}
-                className="px-4 py-3 text-sm text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors cursor-pointer"
+                className="px-4 py-3 text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors cursor-pointer"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {item.label}
               </a>
             ))}
-            <hr className="border-zinc-800 my-2" />
+            <hr className="border-border my-2" />
             <Link href="/sign-in" className="w-full">
               <Button
                 variant="ghost"
-                className="w-full justify-start text-zinc-400 hover:text-white"
+                className="w-full justify-start text-muted-foreground hover:text-foreground"
               >
                 Sign In
               </Button>
             </Link>
             <Link href="/sign-up" className="w-full">
-              <Button className="w-full shimmer-btn bg-white text-zinc-950 hover:bg-zinc-200 rounded-full">
+              <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-full">
                 Get Started
               </Button>
             </Link>
