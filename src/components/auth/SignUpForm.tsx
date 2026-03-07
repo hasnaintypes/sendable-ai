@@ -14,6 +14,7 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { authClient } from "@/lib/auth/client";
+import { Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 
 export function SignupForm({
@@ -24,6 +25,7 @@ export function SignupForm({
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [loading, setLoading] = useState(false);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -49,14 +51,39 @@ export function SignupForm({
         },
         onSuccess: () => {
           setLoading(false);
-          toast.success("Account created successfully!");
+          setIsVerificationSent(true);
+          toast.success("Account created! Please check your email to verify.");
         },
         onError: async (ctx) => {
           setLoading(false);
-          console.error(ctx.error);
-          toast.error(ctx.error.message);
+          console.error("Sign up error:", ctx?.error);
+          const message = ctx?.error?.message || "Failed to create account. Please check your details.";
+          toast.error(message);
         },
       },
+    );
+  };
+
+  const handleSocialSignUp = async (provider: "github" | "google" | "slack") => {
+    await authClient.signIn.social(
+      {
+        provider,
+        callbackURL: "/dashboard",
+      },
+      {
+        onRequest: () => {
+          setLoading(true);
+        },
+        onSuccess: () => {
+          setLoading(false);
+        },
+        onError: (ctx) => {
+          setLoading(false);
+          console.error(`Social sign up error (${provider}):`, ctx?.error);
+          const message = ctx?.error?.message || `Failed to sign up with ${provider}.`;
+          toast.error(message);
+        },
+      }
     );
   };
 

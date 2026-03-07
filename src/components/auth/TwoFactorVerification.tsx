@@ -41,6 +41,12 @@ export default function TwoFactorVerification() {
             setLoading(false);
             router.push("/");
           },
+          onError: (ctx) => {
+            setLoading(false);
+            console.error("TOTP verify error:", ctx?.error);
+            const message = ctx?.error?.message || "Failed to verify code. Please try again.";
+            toast.error(message);
+          },
         },
       });
     } catch (error) {
@@ -56,6 +62,7 @@ export default function TwoFactorVerification() {
       setLoading(true);
       await authClient.twoFactor.sendOtp();
       setOtpSent(true);
+      toast.success("Verification code sent to your email!");
     } catch {
       toast.error("Failed to send verification code. Please try again.");
     } finally {

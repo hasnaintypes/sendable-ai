@@ -48,6 +48,7 @@ export default function ResetPassword({
         },
         onSuccess: () => {
           setLoading(false);
+          toast.success("Password reset successfully!");
           redirect("/sign-in");
         },
         onError: (ctx) => {
