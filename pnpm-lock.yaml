@@ -19,10 +19,10 @@ importers:
         version: 1.2.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@convex-dev/better-auth':
         specifier: ^0.10.13
-        version: 0.10.13(np7xjiokuj43qzv77fzevg5l44)
+        version: 0.10.13(bgn5vu5xc5rxbg7rilkh4t3bi4)
       '@convex-dev/resend':
         specifier: ^0.1.13
-        version: 0.1.13(convex-helpers@0.1.114(@standard-schema/spec@1.1.0)(convex@1.32.0(react@19.2.4))(hono@4.12.5)(react@19.2.4)(typescript@5.9.3)(zod@4.3.6))(convex@1.32.0(react@19.2.4))(react@19.2.4)
+        version: 0.1.13(convex-helpers@0.1.114(@standard-schema/spec@1.1.0)(convex@1.32.0(react@19.2.4))(hono@4.12.7)(react@19.2.4)(typescript@5.9.3)(zod@4.3.6))(convex@1.32.0(react@19.2.4))(react@19.2.4)
       '@hookform/resolvers':
         specifier: ^5.2.2
         version: 5.2.2(react-hook-form@7.71.2(react@19.2.4))
@@ -61,7 +61,7 @@ importers:
         version: 1.32.0(react@19.2.4)
       convex-helpers:
         specifier: ^0.1.114
-        version: 0.1.114(@standard-schema/spec@1.1.0)(convex@1.32.0(react@19.2.4))(hono@4.12.5)(react@19.2.4)(typescript@5.9.3)(zod@4.3.6)
+        version: 0.1.114(@standard-schema/spec@1.1.0)(convex@1.32.0(react@19.2.4))(hono@4.12.7)(react@19.2.4)(typescript@5.9.3)(zod@4.3.6)
       date-fns:
         specifier: ^4.1.0
         version: 4.1.0
@@ -78,7 +78,7 @@ importers:
         specifier: ^1.4.2
         version: 1.4.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       jose:
-        specifier: ^6.1.3
+        specifier: ^6.2.0
         version: 6.2.0
       lenis:
         specifier: ^1.3.18
@@ -123,7 +123,7 @@ importers:
         specifier: ^2.0.18
         version: 2.0.18(react@19.2.4)
       react-resizable-panels:
-        specifier: ^4
+        specifier: ^4.7.1
         version: 4.7.1(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       recharts:
         specifier: 2.15.4
@@ -157,7 +157,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1
       '@types/node':
-        specifier: ^20.19.35
+        specifier: ^20.19.37
         version: 20.19.37
       '@types/nodemailer':
         specifier: ^7.0.11
@@ -4193,8 +4193,8 @@ packages:
   headers-polyfill@4.0.3:
     resolution: {integrity: sha512-IScLbePpkvO846sIwOtOTDjutRMWdXdJmXdMvk6gCBHxFO8d+QKOQedyZSxFTTFYRSmlgSTDtXqqq4pcenBXLQ==}
 
-  hono@4.12.5:
-    resolution: {integrity: sha512-3qq+FUBtlTHhtYxbxheZgY8NIFnkkC/MR8u5TTsr7YZ3wixryQ3cCwn3iZbg8p8B88iDBBAYSfZDS75t8MN7Vg==}
+  hono@4.12.7:
+    resolution: {integrity: sha512-jq9l1DM0zVIvsm3lv9Nw9nlJnMNPOcAtsbsgiUhWcFzPE99Gvo6yRTlszSLLYacMeQ6quHD6hMfId8crVHvexw==}
     engines: {node: '>=16.9.0'}
 
   hosted-git-info@2.8.9:
@@ -6869,14 +6869,14 @@ snapshots:
 
   '@chevrotain/utils@11.1.2': {}
 
-  '@convex-dev/better-auth@0.10.13(np7xjiokuj43qzv77fzevg5l44)':
+  '@convex-dev/better-auth@0.10.13(bgn5vu5xc5rxbg7rilkh4t3bi4)':
     dependencies:
       '@better-auth/passkey': 1.4.9(qe5hlbr6cnob2bsxw7qobhn6b4)
       '@better-fetch/fetch': 1.1.21
       better-auth: 1.4.9(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3))(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3))(kysely@0.28.11)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)))(mongodb@7.1.0)(mysql2@3.15.3)(next@16.1.6(@babel/core@7.29.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(prisma@7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       common-tags: 1.8.2
       convex: 1.32.0(react@19.2.4)
-      convex-helpers: 0.1.114(@standard-schema/spec@1.1.0)(convex@1.32.0(react@19.2.4))(hono@4.12.5)(react@19.2.4)(typescript@5.9.3)(zod@4.3.6)
+      convex-helpers: 0.1.114(@standard-schema/spec@1.1.0)(convex@1.32.0(react@19.2.4))(hono@4.12.7)(react@19.2.4)(typescript@5.9.3)(zod@4.3.6)
       jose: 6.2.0
       react: 19.2.4
       remeda: 2.33.6
@@ -6898,21 +6898,21 @@ snapshots:
     optionalDependencies:
       react: 19.2.4
 
-  '@convex-dev/resend@0.1.13(convex-helpers@0.1.114(@standard-schema/spec@1.1.0)(convex@1.32.0(react@19.2.4))(hono@4.12.5)(react@19.2.4)(typescript@5.9.3)(zod@4.3.6))(convex@1.32.0(react@19.2.4))(react@19.2.4)':
+  '@convex-dev/resend@0.1.13(convex-helpers@0.1.114(@standard-schema/spec@1.1.0)(convex@1.32.0(react@19.2.4))(hono@4.12.7)(react@19.2.4)(typescript@5.9.3)(zod@4.3.6))(convex@1.32.0(react@19.2.4))(react@19.2.4)':
     dependencies:
       '@convex-dev/rate-limiter': 0.2.14(convex@1.32.0(react@19.2.4))(react@19.2.4)
-      '@convex-dev/workpool': 0.2.19(convex-helpers@0.1.114(@standard-schema/spec@1.1.0)(convex@1.32.0(react@19.2.4))(hono@4.12.5)(react@19.2.4)(typescript@5.9.3)(zod@4.3.6))(convex@1.32.0(react@19.2.4))
+      '@convex-dev/workpool': 0.2.19(convex-helpers@0.1.114(@standard-schema/spec@1.1.0)(convex@1.32.0(react@19.2.4))(hono@4.12.7)(react@19.2.4)(typescript@5.9.3)(zod@4.3.6))(convex@1.32.0(react@19.2.4))
       convex: 1.32.0(react@19.2.4)
-      convex-helpers: 0.1.114(@standard-schema/spec@1.1.0)(convex@1.32.0(react@19.2.4))(hono@4.12.5)(react@19.2.4)(typescript@5.9.3)(zod@4.3.6)
+      convex-helpers: 0.1.114(@standard-schema/spec@1.1.0)(convex@1.32.0(react@19.2.4))(hono@4.12.7)(react@19.2.4)(typescript@5.9.3)(zod@4.3.6)
       remeda: 2.33.6
       svix: 1.86.0
     transitivePeerDependencies:
       - react
 
-  '@convex-dev/workpool@0.2.19(convex-helpers@0.1.114(@standard-schema/spec@1.1.0)(convex@1.32.0(react@19.2.4))(hono@4.12.5)(react@19.2.4)(typescript@5.9.3)(zod@4.3.6))(convex@1.32.0(react@19.2.4))':
+  '@convex-dev/workpool@0.2.19(convex-helpers@0.1.114(@standard-schema/spec@1.1.0)(convex@1.32.0(react@19.2.4))(hono@4.12.7)(react@19.2.4)(typescript@5.9.3)(zod@4.3.6))(convex@1.32.0(react@19.2.4))':
     dependencies:
       convex: 1.32.0(react@19.2.4)
-      convex-helpers: 0.1.114(@standard-schema/spec@1.1.0)(convex@1.32.0(react@19.2.4))(hono@4.12.5)(react@19.2.4)(typescript@5.9.3)(zod@4.3.6)
+      convex-helpers: 0.1.114(@standard-schema/spec@1.1.0)(convex@1.32.0(react@19.2.4))(hono@4.12.7)(react@19.2.4)(typescript@5.9.3)(zod@4.3.6)
 
   '@date-fns/tz@1.4.1': {}
 
@@ -7110,9 +7110,9 @@ snapshots:
 
   '@hexagon/base64@1.1.28': {}
 
-  '@hono/node-server@1.19.11(hono@4.12.5)':
+  '@hono/node-server@1.19.11(hono@4.12.7)':
     dependencies:
-      hono: 4.12.5
+      hono: 4.12.7
 
   '@hookform/resolvers@5.2.2(react-hook-form@7.71.2(react@19.2.4))':
     dependencies:
@@ -7341,7 +7341,7 @@ snapshots:
 
   '@modelcontextprotocol/sdk@1.27.1(zod@3.25.76)':
     dependencies:
-      '@hono/node-server': 1.19.11(hono@4.12.5)
+      '@hono/node-server': 1.19.11(hono@4.12.7)
       ajv: 8.18.0
       ajv-formats: 3.0.1(ajv@8.18.0)
       content-type: 1.0.5
@@ -7351,7 +7351,7 @@ snapshots:
       eventsource-parser: 3.0.6
       express: 5.2.1
       express-rate-limit: 8.3.0(express@5.2.1)
-      hono: 4.12.5
+      hono: 4.12.7
       jose: 6.2.0
       json-schema-typed: 8.0.2
       pkce-challenge: 5.0.1
@@ -7638,13 +7638,13 @@ snapshots:
       '@electric-sql/pglite': 0.3.15
       '@electric-sql/pglite-socket': 0.0.20(@electric-sql/pglite@0.3.15)
       '@electric-sql/pglite-tools': 0.2.20(@electric-sql/pglite@0.3.15)
-      '@hono/node-server': 1.19.11(hono@4.12.5)
+      '@hono/node-server': 1.19.11(hono@4.12.7)
       '@mrleebo/prisma-ast': 0.13.1
       '@prisma/get-platform': 7.2.0
       '@prisma/query-plan-executor': 7.2.0
       foreground-child: 3.3.1
       get-port-please: 3.2.0
-      hono: 4.12.5
+      hono: 4.12.7
       http-status-codes: 2.3.0
       pathe: 2.0.3
       proper-lockfile: 4.1.2
@@ -9595,12 +9595,12 @@ snapshots:
 
   convert-source-map@2.0.0: {}
 
-  convex-helpers@0.1.114(@standard-schema/spec@1.1.0)(convex@1.32.0(react@19.2.4))(hono@4.12.5)(react@19.2.4)(typescript@5.9.3)(zod@4.3.6):
+  convex-helpers@0.1.114(@standard-schema/spec@1.1.0)(convex@1.32.0(react@19.2.4))(hono@4.12.7)(react@19.2.4)(typescript@5.9.3)(zod@4.3.6):
     dependencies:
       convex: 1.32.0(react@19.2.4)
     optionalDependencies:
       '@standard-schema/spec': 1.1.0
-      hono: 4.12.5
+      hono: 4.12.7
       react: 19.2.4
       typescript: 5.9.3
       zod: 4.3.6
@@ -10909,7 +10909,7 @@ snapshots:
 
   headers-polyfill@4.0.3: {}
 
-  hono@4.12.5: {}
+  hono@4.12.7: {}
 
   hosted-git-info@2.8.9: {}
 
