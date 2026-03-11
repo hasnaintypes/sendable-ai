@@ -9,8 +9,10 @@
     "dev:backend": "convex dev --typecheck-components",
     "dev:build": "chokidar 'tsconfig*.json' 'src/**/*.ts' 'src/**/*.tsx' -i '**/*.test.ts' -c 'npm run build' --initial",
     "predev": "convex dev --skip-push && node -e \"if (!require('fs').existsSync('dist')) require('fs').mkdirSync('dist', { recursive: true })\"",
-    "build": "convex codegen && next build",
-    "lint": "next lint && tsc -p convex && eslint convex",
+    "build": "next build",
+    "build:codegen": "convex codegen && next build",
+    "typecheck": "tsc --noEmit && tsc -p convex --noEmit",
+    "lint": "eslint src convex",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\" \"convex/**/*.{ts,js}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,md}\" \"convex/**/*.{ts,js}\""
   },
