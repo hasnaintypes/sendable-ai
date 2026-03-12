@@ -6,7 +6,7 @@ settings:
 
 overrides:
   '@modelcontextprotocol/sdk': '>=1.25.4'
-  hono: ^4.12.4
+  hono: ^4.12.7
   '@hono/node-server': ^1.19.10
   lodash: ^4.17.23
 
@@ -689,7 +689,7 @@ packages:
     resolution: {integrity: sha512-dr8/3zEaB+p0D2n/IUrlPF1HZm586qgJNXK1a9fhg/PzdtkK7Ksd5l312tJX2yBuALqDYBlG20QEbayqPyxn+g==}
     engines: {node: '>=18.14.1'}
     peerDependencies:
-      hono: ^4.12.4
+      hono: ^4.12.7
 
   '@hookform/resolvers@5.2.2':
     resolution: {integrity: sha512-A/IxlMLShx3KjV/HeTcTfaMxdwy690+L/ZADoeaTltLx+CVuzkeVIPuybK3jrRfw7YZnmdKsVVHAlEPIAEUNlA==}
@@ -3099,7 +3099,7 @@ packages:
     peerDependencies:
       '@standard-schema/spec': ^1.0.0
       convex: ^1.32.0
-      hono: ^4.12.4
+      hono: ^4.12.7
       react: ^17.0.2 || ^18.0.0 || ^19.0.0
       typescript: ^5.5
       zod: ^3.25.0 || ^4.0.0
