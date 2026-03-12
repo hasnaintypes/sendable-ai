@@ -15,8 +15,8 @@ import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { authClient } from "@/lib/auth/client";
 import { useRouter } from "next/navigation";
-
-type VerificationMethod = "totp" | "otp" | "backup";
+import { toast } from "sonner";
+import type { VerificationMethod } from "@/types/auth";
 
 export default function TwoFactorVerification() {
   const [method, setMethod] = useState<VerificationMethod>("totp");
@@ -40,11 +40,16 @@ export default function TwoFactorVerification() {
             setLoading(false);
             router.push("/");
           },
+          onError: (ctx) => {
+            setLoading(false);
+            const message =
+              ctx?.error?.message || "Failed to verify code. Please try again.";
+            toast.error(message);
+          },
         },
       });
-    } catch (error) {
-      console.log("error", error);
-      alert("Failed to verify code. Please try again.");
+    } catch {
+      toast.error("Failed to verify code. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -55,8 +60,9 @@ export default function TwoFactorVerification() {
       setLoading(true);
       await authClient.twoFactor.sendOtp();
       setOtpSent(true);
+      toast.success("Verification code sent to your email!");
     } catch {
-      alert("Failed to send verification code. Please try again.");
+      toast.error("Failed to send verification code. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -71,7 +77,7 @@ export default function TwoFactorVerification() {
       });
       // Redirect will happen automatically on success
     } catch {
-      alert("Failed to verify code. Please try again.");
+      toast.error("Failed to verify code. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -85,7 +91,7 @@ export default function TwoFactorVerification() {
       });
       // Redirect will happen automatically on success
     } catch {
-      alert("Failed to verify backup code. Please try again.");
+      toast.error("Failed to verify backup code. Please try again.");
     } finally {
       setLoading(false);
     }

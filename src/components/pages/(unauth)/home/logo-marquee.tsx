@@ -26,15 +26,15 @@ export function LogoMarquee() {
         transition={{ duration: 0.6 }}
         className="text-center mb-10"
       >
-        <p className="text-sm text-zinc-500 uppercase tracking-wider font-medium">
+        <p className="text-sm text-muted-foreground uppercase tracking-wider font-medium">
           Trusted by industry leaders
         </p>
       </motion.div>
 
       <div className="relative">
         {/* Fade masks */}
-        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-zinc-950 to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-zinc-950 to-transparent z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
         {/* Marquee container */}
         <div className="flex animate-marquee">
@@ -43,16 +43,11 @@ export function LogoMarquee() {
               key={index}
               className="flex items-center justify-center min-w-[160px] h-16 mx-8 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
             >
-              <div className="flex items-center gap-2 text-zinc-400">
-                <div className="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center">
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center">
                   <span className="text-xs font-bold">{logo.name[0]}</span>
                 </div>
-                <span
-                  className="font-medium"
-                  style={{ fontFamily: "var(--font-instrument-sans)" }}
-                >
-                  {logo.name}
-                </span>
+                <span className="font-medium">{logo.name}</span>
               </div>
             </div>
           ))}

@@ -1,7 +1,11 @@
-import type { NextConfig } from "next";
+import nextra from "nextra";
 import path from "path";
 
-const nextConfig: NextConfig = {
+const withNextra = nextra({
+  contentDirBasePath: "/docs",
+});
+
+export default withNextra({
   turbopack: {
     root: path.join(__dirname, "."),
   },
@@ -18,6 +22,4 @@ const nextConfig: NextConfig = {
     ],
   },
   reactStrictMode: false,
-};
-
-export default nextConfig;
+});

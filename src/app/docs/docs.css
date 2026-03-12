@@ -1,0 +1,11 @@
+.nextra-navbar-blur {
+  backdrop-filter: blur(12px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(180%) !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  .nextra-navbar-blur {
+    background-color: rgba(17, 17, 17, 0.8) !important;
+  }
+}

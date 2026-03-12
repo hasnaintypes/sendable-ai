@@ -15,6 +15,9 @@ export const getCurrentUser = query({
 export const getUserById = query({
   args: { userId: v.string() },
   handler: async (ctx, args) => {
+    // Only authenticated users can look up user profiles
+    const currentUser = await authComponent.safeGetAuthUser(ctx);
+    if (!currentUser) return null;
     return ctx.runQuery(components.betterAuth.users.getUser, {
       userId: args.userId,
     });

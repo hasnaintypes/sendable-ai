@@ -1,6 +1,6 @@
-# Contributing to Sendable.ai
+# Contributing to Sendable
 
-First off, thank you for considering contributing to Sendable.ai! 🎉
+First off, thank you for considering contributing to Sendable! 🎉
 
 The following is a set of guidelines for contributing to this project. These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
 
@@ -548,7 +548,7 @@ If you have questions:
 
 ## Thank You!
 
-Your contributions make Sendable.ai better for everyone. We appreciate your time and effort!
+Your contributions make Sendable better for everyone. We appreciate your time and effort!
 
 ---
 

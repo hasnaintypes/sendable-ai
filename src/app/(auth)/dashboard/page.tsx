@@ -1,20 +1,21 @@
 import { Toaster } from "sonner";
-import { api } from "@/convex/_generated/api";
-import { TodoList } from "../../../components/todos/TodoList";
-import { AppHeader } from "../../../components/layout/AppHeader";
-import { preloadAuthQuery } from "@/lib/auth/server";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Page = async () => {
-  // Preload queries for SSR
-  const [preloadedUserQuery, preloadedTodosQuery] = await Promise.all([
-    preloadAuthQuery(api.auth.queries.getCurrentUser),
-    preloadAuthQuery(api.todos.queries.get),
-  ]);
-
   return (
-    <div className="min-h-screen w-full p-4 space-y-8">
-      <AppHeader preloadedUserQuery={preloadedUserQuery} />
-      <TodoList preloadedTodosQuery={preloadedTodosQuery} />
+    <div className="flex-1 space-y-4 p-8">
+      <div className="space-y-2">
+        <Skeleton className="h-10 w-[280px]" />
+        <Skeleton className="h-5 w-[420px]" />
+      </div>
+
+      <div className="space-y-4 pt-4">
+        <Skeleton className="h-[200px] w-full rounded-lg" />
+        <Skeleton className="h-[300px] w-full rounded-lg" />
+        <Skeleton className="h-[240px] w-full rounded-lg" />
+        <Skeleton className="h-[180px] w-full rounded-lg" />
+      </div>
+
       <Toaster />
     </div>
   );

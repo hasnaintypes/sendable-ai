@@ -1,70 +1,37 @@
 "use client";
 
-import Link from "next/link";
 import { api } from "@/convex/_generated/api";
-import { Button } from "@/components/ui/button";
-import { LogOut, Settings } from "lucide-react";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator";
 import { Preloaded } from "convex/react";
-import { useRouter } from "next/navigation";
-import { authClient } from "@/lib/auth/client";
-import { usePreloadedAuthQuery } from "@convex-dev/better-auth/nextjs/client";
-
-const UserProfile = ({
-  preloadedUserQuery,
-}: {
-  preloadedUserQuery: Preloaded<typeof api.auth.queries.getCurrentUser>;
-}) => {
-  const user = usePreloadedAuthQuery(preloadedUserQuery);
-  return (
-    <div className="flex items-center space-x-2">
-      {user?.image ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={user.image}
-          alt={user.name}
-          width={40}
-          height={40}
-          className="rounded-full"
-        />
-      ) : (
-        <div className="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900 flex items-center justify-center text-orange-600 dark:text-orange-200 font-medium">
-          {user?.name?.[0].toUpperCase()}
-        </div>
-      )}
-      <div>
-        <h1 className="font-medium">{user?.name}</h1>
-        <p className="text-sm text-neutral-500">{user?.email}</p>
-      </div>
-    </div>
-  );
-};
+import { CommandMenu } from "@/components/shared/CommandMenu";
+import { ThemeSwitcher } from "@/components/shared/ThemeSwitcher";
+import { NotificationCenter } from "@/components/shared/NotificationCenter";
+import { UserMenu } from "@/components/shared/UserMenu";
 
 export const AppHeader = ({
   preloadedUserQuery,
 }: {
   preloadedUserQuery: Preloaded<typeof api.auth.queries.getCurrentUser>;
 }) => {
-  const router = useRouter();
-  const handleSignOut = async () => {
-    await authClient.signOut();
-    router.push("/sign-in");
-  };
   return (
-    <header className="flex items-center justify-between max-w-2xl mx-auto">
-      <UserProfile preloadedUserQuery={preloadedUserQuery} />
+    <header className="sticky top-0 z-50 flex h-16 shrink-0 items-center gap-2 border-b bg-background px-4">
       <div className="flex items-center gap-2">
-        <Button variant="ghost" size="sm" asChild>
-          <Link href="/settings">
-            <div className="flex items-center gap-2">
-              <Settings size={16} />
-              Settings
-            </div>
-          </Link>
-        </Button>
-        <Button variant="ghost" size="sm" onClick={handleSignOut}>
-          <LogOut size={16} className="mr-2" />
-          Sign out
-        </Button>
+        <SidebarTrigger className="-ml-1" />
+        <Separator orientation="vertical" className="mr-2 h-4" />
+      </div>
+
+      <div className="flex-1 flex items-center justify-between gap-4">
+        <div className="flex-1 max-w-md">
+          <CommandMenu />
+        </div>
+
+        <div className="flex items-center gap-2">
+          <ThemeSwitcher />
+          <NotificationCenter />
+          <Separator orientation="vertical" className="h-6" />
+          <UserMenu preloadedUserQuery={preloadedUserQuery} />
+        </div>
       </div>
     </header>
   );
