@@ -1,6 +1,6 @@
-# Sendable
+# sendable-web
 
-> AI-powered email outreach platform for sales teams, recruiters, and professionals who need personalized cold emails at scale.
+> Frontend application for Sendable AI — an autonomous outreach platform that discovers prospects, researches them, and sends personalized emails on your behalf.
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=next.js&logoColor=white)](https://nextjs.org/)
@@ -10,34 +10,147 @@
 
 ---
 
-## Overview
+## What This Repo Is
 
-Sendable generates hyper-personalized outreach emails using AI. It automates audience research, intent-based email generation, and multi-step follow-up sequences so you can focus on closing deals instead of writing cold emails.
+This is the Next.js frontend and Convex backend for Sendable AI. It handles:
 
-### Key Capabilities
+- All user-facing UI (campaigns, leads, inbox, analytics, settings)
+- Authentication via Better Auth
+- Real-time data sync via Convex
+- Communicates with the agent backend via REST API (`sendable-api`)
 
-- **AI Email Generation** - One-click personalized emails with optimized subject lines, body copy, and CTAs
-- **Intent-Based Engine** - Automatically adapts tone and messaging for sales, recruiting, or networking contexts
-- **Audience Research** - AI scans prospect web presence and surfaces personalization hooks
-- **Smart Follow-ups** - Automated multi-step sequences that keep conversations going
-- **Rich Editor** - Dual Markdown/WYSIWYG editor with inline AI rewrites and version history
-- **Session Management** - Real-time session tracking with browser detection and revocation
-- **Two-Factor Auth** - TOTP-based 2FA with backup codes and email OTP
+**This repo does not contain AI agents, background jobs, or the prospect dataset.** Those live in [`sendable-api`](https://github.com/hasnaintypes/sendable-api).
+
+---
+
+## System Architecture (Brief)
+
+```
+sendable-web (this repo)          sendable-api (separate repo)
+─────────────────────────         ────────────────────────────
+Next.js + Convex                  FastAPI + Inngest + Neon
+     │                                      │
+     │  REST calls (JWT)  ──────────────►   │
+     │                                      │
+     │  ◄── writes back via Convex HTTP ─── │
+     │                                      │
+Convex Cloud ◄────────────────────────── Convex HTTP actions
+```
+
+For full system architecture see the architecture document in the project docs.
 
 ---
 
 ## Tech Stack
 
 | Layer | Technology |
-|-------|-----------|
-| **Framework** | [Next.js 16](https://nextjs.org/) (React 19, App Router) |
-| **Backend** | [Convex](https://convex.dev/) (real-time database + serverless functions) |
-| **Auth** | [Better Auth](https://better-auth.com/) (email/password, OAuth, 2FA, magic links) |
-| **Email** | [Resend](https://resend.com/) + [Nodemailer](https://nodemailer.com/) SMTP fallback |
-| **UI** | [Tailwind CSS v4](https://tailwindcss.com/) + [shadcn/ui](https://ui.shadcn.com/) |
-| **Animations** | [Framer Motion](https://www.framer.com/motion/) |
-| **Logging** | [BetterStack / Logtail](https://betterstack.com/logs) (production) |
-| **Language** | TypeScript (strict mode, full-stack type safety) |
+|---|---|
+| Framework | Next.js 15 (App Router, React 19) |
+| Product Backend | Convex (real-time database + serverless functions) |
+| Auth | Better Auth (email/password, OAuth, 2FA, magic links) |
+| UI | Tailwind CSS v4 + shadcn/ui |
+| Email (transactional) | Resend + Nodemailer SMTP fallback |
+| Animations | Framer Motion |
+| Logging | BetterStack / Logtail (production) |
+| Language | TypeScript (strict mode) |
+| Package Manager | pnpm |
+
+---
+
+## Project Structure
+
+```
+sendable-web/
+├── convex/                         # Convex serverless backend
+│   ├── betterAuth/                 # Better Auth adapter + schema
+│   │   ├── adapter.ts
+│   │   ├── auth.ts
+│   │   └── schema.ts
+│   ├── auth/                       # Auth helpers, queries, mutations
+│   ├── emails/                     # Transactional email service
+│   │   ├── email.tsx               # Send actions (Resend + SMTP fallback)
+│   │   └── templates/              # React Email templates
+│   ├── campaigns/                  # Campaign queries + mutations
+│   ├── prospects/                  # Campaign prospect queries + mutations
+│   ├── drafts/                     # Draft queries + mutations
+│   ├── jobStatus/                  # Live job status + campaign logs
+│   ├── leads/                      # Lead management queries + mutations
+│   ├── sequences/                  # Sequence + sequence step mutations
+│   ├── usage/                      # Usage counter queries + mutations
+│   ├── notifications/              # Notification queries + mutations
+│   ├── connectedInboxes/           # Inbox connection queries + mutations
+│   ├── userPreferences/            # Profile + preferences
+│   ├── users/                      # User schema + queries
+│   ├── lib/
+│   │   └── logger.ts               # Backend logger
+│   ├── http.ts                     # Convex HTTP actions (receives FastAPI writes)
+│   └── schema.ts                   # Root schema
+│
+├── src/
+│   ├── app/                        # Next.js App Router
+│   │   ├── (auth)/                 # Authenticated routes
+│   │   │   ├── dashboard/
+│   │   │   ├── leads/
+│   │   │   │   ├── import/
+│   │   │   │   └── segments/
+│   │   │   ├── campaigns/
+│   │   │   │   ├── new/
+│   │   │   │   ├── templates/
+│   │   │   │   ├── sequences/
+│   │   │   │   └── [id]/
+│   │   │   │       └── prospect/[pid]/
+│   │   │   ├── inbox/
+│   │   │   │   ├── interested/
+│   │   │   │   └── pending/
+│   │   │   ├── analytics/
+│   │   │   │   ├── campaigns/
+│   │   │   │   ├── scoring/
+│   │   │   │   └── reports/
+│   │   │   └── settings/
+│   │   │       ├── profile/
+│   │   │       ├── security/
+│   │   │       ├── inboxes/
+│   │   │       ├── billing/
+│   │   │       └── notifications/
+│   │   ├── (unauth)/               # Public routes
+│   │   │   ├── sign-in/
+│   │   │   ├── sign-up/
+│   │   │   ├── verify-email/
+│   │   │   ├── forget-password/
+│   │   │   ├── reset-password/
+│   │   │   └── verify-2fa/
+│   │   ├── api/
+│   │   │   └── auth/[...all]/      # Better Auth handler
+│   │   ├── docs/                   # Internal docs viewer
+│   │   └── layout.tsx
+│   │
+│   ├── components/
+│   │   ├── auth/                   # Sign in, sign up, reset, 2FA forms
+│   │   ├── campaigns/              # Campaign creation, list, live view
+│   │   ├── leads/                  # Lead list, import, segments
+│   │   ├── inbox/                  # Message inbox, reply management
+│   │   ├── analytics/              # Analytics charts and reports
+│   │   ├── editor/                 # Tiptap email draft editor
+│   │   ├── dialogs/                # Modal dialogs
+│   │   ├── layout/                 # AppSidebar, AppHeader, Footer
+│   │   ├── pages/                  # Route-level page components
+│   │   ├── providers/              # ConvexClientProvider, ThemeProvider
+│   │   ├── shared/                 # Logo, UserMenu, CommandMenu, NotificationCenter
+│   │   └── ui/                     # shadcn/ui primitives
+│   │
+│   ├── hooks/                      # Custom React hooks
+│   │
+│   └── lib/
+│       ├── auth/
+│       │   ├── client.ts           # Better Auth browser client
+│       │   └── server.ts           # Better Auth server helpers
+│       ├── api.ts                  # Typed HTTP client for sendable-api calls
+│       ├── logger.ts               # Frontend logger
+│       └── utils.ts
+│
+└── public/
+    └── icons/                      # Logo, provider SVGs
+```
 
 ---
 
@@ -45,136 +158,79 @@ Sendable generates hyper-personalized outreach emails using AI. It automates aud
 
 ### Prerequisites
 
-- **Node.js** >= 20.x
-- **pnpm** >= 9.x
-- A free [Convex](https://convex.dev/) account
+- Node.js >= 20.x
+- pnpm >= 9.x
+- A [Convex](https://convex.dev/) account
+- `sendable-api` running locally (for campaign features)
 
-### 1. Clone & Install
+### 1. Clone and install
 
 ```bash
-git clone https://github.com/hasnaintypes/sendable-ai.git
-cd sendable-ai
+git clone https://github.com/hasnaintypes/sendable-web.git
+cd sendable-web
 pnpm install
 ```
 
-### 2. Configure Environment
+### 2. Configure environment
 
 ```bash
 cp .env.example .env.local
 ```
 
-Edit `.env.local` with your values. See [Environment Variables](#environment-variables) for details.
+Fill in `.env.local`. See [Environment Variables](#environment-variables) below.
 
-Set the same variables in your [Convex dashboard](https://dashboard.convex.dev/) under **Settings > Environment Variables**.
-
-### 3. Start Development
+### 3. Start development
 
 ```bash
 pnpm dev
 ```
 
-This starts Next.js + Convex simultaneously. Open [http://localhost:3000](http://localhost:3000).
-
----
-
-## Project Structure
-
-```
-sendable-ai/
-├── convex/                       # Backend (Convex serverless)
-│   ├── auth/                     # Auth helpers, queries, mutations
-│   ├── betterAuth/               # Better Auth schema & config
-│   ├── emails/                   # Email service + React Email templates
-│   │   ├── email.tsx             # Send actions (Resend + SMTP fallback)
-│   │   └── templates/            # Email templates (BaseLayout, Verify, Reset, etc.)
-│   ├── lib/                      # Shared backend utilities
-│   │   └── logger.ts             # Logger (console local, BetterStack production)
-│   ├── userPreferences/          # User profile & notification prefs
-│   │   ├── schema.ts
-│   │   ├── queries.ts
-│   │   ├── mutations.ts
-│   │   └── upload.ts             # Profile image upload via Convex storage
-│   ├── users/                    # User schema (extends Better Auth)
-│   └── schema.ts                 # Root schema (composes all tables)
-│
-├── src/
-│   ├── app/                      # Next.js App Router
-│   │   ├── (auth)/               # Authenticated routes (dashboard, settings)
-│   │   ├── (unauth)/             # Public routes (sign-in, sign-up, etc.)
-│   │   └── layout.tsx            # Root layout (providers, font, theme)
-│   │
-│   ├── components/
-│   │   ├── auth/                 # Auth forms (sign-in, sign-up, reset, 2FA)
-│   │   ├── dialogs/              # Modal dialogs (delete account, 2FA, change email)
-│   │   ├── layout/               # Shell components (AppHeader, AppSidebar, Footer)
-│   │   ├── pages/                # Route-specific components
-│   │   │   ├── (auth)/settings/  # Settings tab sections
-│   │   │   └── (unauth)/home/    # Landing page sections
-│   │   ├── providers/            # React context providers
-│   │   ├── shared/               # Shared components (Logo, UserMenu, ThemeSwitcher)
-│   │   └── ui/                   # shadcn/ui primitives
-│   │
-│   └── lib/
-│       ├── auth/                 # Auth client (browser) & server helpers
-│       ├── logger.ts             # Frontend logger (dev console, prod silent)
-│       └── utils.ts              # Utility functions
-│
-├── public/
-│   └── icons/                    # Browser icons, logo, social provider SVGs
-│
-└── package.json
-```
-
----
-
-## Scripts
-
-```bash
-pnpm dev              # Start dev server (Next.js + Convex)
-pnpm build            # Production build
-pnpm lint             # ESLint + TypeScript checks
-pnpm format           # Prettier format
-pnpm format:check     # Check formatting
-```
+Starts Next.js and Convex simultaneously. Open [http://localhost:3000](http://localhost:3000).
 
 ---
 
 ## Environment Variables
 
-| Variable | Required | Where | Description |
-|----------|----------|-------|-------------|
-| `CONVEX_DEPLOYMENT` | Yes | `.env.local` | Convex deployment identifier |
-| `NEXT_PUBLIC_CONVEX_URL` | Yes | Both | Convex cloud URL |
-| `NEXT_PUBLIC_CONVEX_SITE_URL` | Yes | Both | Convex HTTP actions URL |
-| `SITE_URL` | Yes | Convex | App URL (used for auth origins and email links) |
-| `NEXT_PUBLIC_SITE_URL` | Yes | `.env.local` | Public app URL |
-| `BETTER_AUTH_SECRET` | Yes | Convex | Auth encryption secret (`openssl rand -base64 32`) |
-| `RESEND_API_KEY` | Yes | Convex | Resend API key for production emails |
-| `EMAIL_PROVIDER` | No | Convex | `"resend"` (default) or `"smtp"` |
-| `SMTP_HOST` | If SMTP | Convex | SMTP server hostname |
-| `SMTP_PORT` | No | Convex | SMTP port (default: `587`) |
-| `SMTP_USER` | If SMTP | Convex | SMTP username |
-| `SMTP_PASS` | If SMTP | Convex | SMTP password |
-| `SMTP_SECURE` | No | Convex | `"true"` for TLS (default: `false`) |
-| `SMTP_FROM_NAME` | No | Convex | Sender name (default: `Sendable`) |
-| `SMTP_FROM_EMAIL` | No | Convex | Sender email (default: `onboarding@resend.dev`) |
-| `RESEND_VERIFIED_RECIPIENT` | No | Convex | Restrict Resend to one email (free tier) |
-| `LOGTAIL_SOURCE_TOKEN` | No | Convex | BetterStack source token for production logging |
-| `GITHUB_CLIENT_ID` | No | Convex | GitHub OAuth client ID |
-| `GITHUB_CLIENT_SECRET` | No | Convex | GitHub OAuth client secret |
-| `GOOGLE_CLIENT_ID` | No | Convex | Google OAuth client ID |
-| `GOOGLE_CLIENT_SECRET` | No | Convex | Google OAuth client secret |
-| `SLACK_CLIENT_ID` | No | Convex | Slack OAuth client ID |
-| `SLACK_CLIENT_SECRET` | No | Convex | Slack OAuth client secret |
+### `.env.local` (Next.js)
 
-**"Both"** = set in both `.env.local` and Convex dashboard. **"Convex"** = Convex dashboard only.
+| Variable | Required | Description |
+|---|---|---|
+| `CONVEX_DEPLOYMENT` | Yes | Convex deployment identifier |
+| `NEXT_PUBLIC_CONVEX_URL` | Yes | Convex cloud WebSocket URL |
+| `NEXT_PUBLIC_CONVEX_SITE_URL` | Yes | Convex HTTP actions URL |
+| `NEXT_PUBLIC_SITE_URL` | Yes | Public app URL e.g. `http://localhost:3000` |
+| `NEXT_PUBLIC_API_URL` | Yes | `sendable-api` base URL e.g. `http://localhost:8000` |
 
-### Email setup for development
+### Convex Dashboard Environment Variables
 
-For local development, set `EMAIL_PROVIDER=smtp` and use [Mailpit](https://mailpit.axllent.org/) or [Mailtrap](https://mailtrap.io/):
+Set these in your [Convex dashboard](https://dashboard.convex.dev/) under **Settings > Environment Variables**.
+
+| Variable | Required | Description |
+|---|---|---|
+| `SITE_URL` | Yes | App URL — used for auth redirect URLs and email links |
+| `BETTER_AUTH_SECRET` | Yes | Auth encryption secret (`openssl rand -base64 32`) |
+| `RESEND_API_KEY` | Yes | Resend API key for transactional emails |
+| `EMAIL_PROVIDER` | No | `"resend"` (default) or `"smtp"` |
+| `SMTP_HOST` | If SMTP | SMTP server hostname |
+| `SMTP_PORT` | No | SMTP port (default: `587`) |
+| `SMTP_USER` | If SMTP | SMTP username |
+| `SMTP_PASS` | If SMTP | SMTP password |
+| `SMTP_SECURE` | No | `"true"` for TLS |
+| `SMTP_FROM_NAME` | No | Sender name (default: `Sendable`) |
+| `SMTP_FROM_EMAIL` | No | Sender email |
+| `RESEND_VERIFIED_RECIPIENT` | No | Restrict to one address (Resend free tier) |
+| `LOGTAIL_SOURCE_TOKEN` | No | BetterStack token for production logging |
+| `GOOGLE_CLIENT_ID` | No | Google OAuth client ID |
+| `GOOGLE_CLIENT_SECRET` | No | Google OAuth client secret |
+| `GITHUB_CLIENT_ID` | No | GitHub OAuth client ID |
+| `GITHUB_CLIENT_SECRET` | No | GitHub OAuth client secret |
+
+### Local email setup
+
+For local development use [Mailpit](https://mailpit.axllent.org/):
 
 ```bash
-# Mailpit (local SMTP catcher)
+EMAIL_PROVIDER=smtp
 SMTP_HOST=localhost
 SMTP_PORT=1025
 SMTP_USER=
@@ -183,62 +239,61 @@ SMTP_PASS=
 
 ---
 
+## Scripts
+
+```bash
+pnpm dev            # Start Next.js + Convex dev server
+pnpm build          # Production build
+pnpm lint           # ESLint + TypeScript checks
+pnpm format         # Prettier format
+pnpm format:check   # Check formatting without writing
+```
+
+---
+
 ## Authentication
 
 | Feature | Status |
-|---------|--------|
-| Email/password sign-up & sign-in | Active |
-| Email verification | Active |
-| Password reset flow | Active |
-| Two-factor authentication (TOTP) | Active |
-| Magic link login | Active |
-| OTP verification | Active |
-| Session management & revocation | Active |
-| Rate limiting (10 req/60s) | Active |
-| OAuth (GitHub, Google, Slack) | Ready (env vars needed) |
+|---|---|
+| Email / password sign-up and sign-in | ✅ Active |
+| Email verification | ✅ Active |
+| Password reset | ✅ Active |
+| Two-factor authentication (TOTP) | ✅ Active |
+| Magic link login | ✅ Active |
+| OTP verification | ✅ Active |
+| Session management and revocation | ✅ Active |
+| Google OAuth | ✅ Ready (env vars needed) |
+| GitHub OAuth | ✅ Ready (env vars needed) |
+| Gmail inbox OAuth (for sending) | 🔧 In progress |
+
+> Gmail inbox OAuth for outreach sending is separate from sign-in OAuth. It is configured in Settings → Connected Inboxes and handled via `sendable-api`.
 
 ---
 
-## Security
+## Convex HTTP Actions
 
-- Rate limiting on all auth endpoints (10 requests per 60-second window)
-- Password strength validation with real-time requirements checklist
-- 2FA disable requires password confirmation
-- Account linking restricted to same-email only
-- User lookup queries require authentication
-- CSRF protection via framework defaults (Convex + Better Auth)
-- File uploads validated for type and size (2MB max, image types only)
-- Structured logging with no PII in production logs (BetterStack)
-- Environment variables validated with descriptive error messages
+`convex/http.ts` exposes HTTP endpoints that `sendable-api` calls to write data back into Convex after agent jobs complete. These are not called by the frontend directly.
+
+Endpoints include:
+- `POST /convex/campaigns/update-status`
+- `POST /convex/campaigns/append-log`
+- `POST /convex/prospects/update`
+- `POST /convex/drafts/create`
+- `POST /convex/usage/increment`
+- `POST /convex/notifications/create`
+
+All require a `CONVEX_DEPLOY_KEY` bearer token set in `sendable-api`'s environment. They are not publicly accessible.
 
 ---
 
-## Contributing
+## Related Repos
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
-
-```bash
-git checkout -b feature/your-feature
-# Make changes
-pnpm lint              # Verify before committing
-git commit -m "feat: describe your change"
-git push origin feature/your-feature
-# Open a Pull Request
-```
+| Repo | Description |
+|---|---|
+| [`sendable-api`](https://github.com/hasnaintypes/sendable-api) | FastAPI agent backend — prospect discovery, research, email generation, sending |
 
 ---
 
 ## License
 
-This project is proprietary. All rights reserved.
-
----
-
-## Acknowledgments
-
-- [Convex](https://convex.dev/) - Real-time backend
-- [Better Auth](https://better-auth.com/) - Authentication
-- [shadcn/ui](https://ui.shadcn.com/) - UI components
-- [Next.js](https://nextjs.org/) - React framework
-- [Resend](https://resend.com/) - Email delivery
-- [BetterStack](https://betterstack.com/) - Production logging
+Proprietary. All rights reserved.
