@@ -11,6 +11,8 @@
 import type * as auth_helpers from "../auth/helpers.js";
 import type * as auth_mutations from "../auth/mutations.js";
 import type * as auth_queries from "../auth/queries.js";
+import type * as campaigns_mutations from "../campaigns/mutations.js";
+import type * as campaigns_queries from "../campaigns/queries.js";
 import type * as emails_components_BaseEmail from "../emails/components/BaseEmail.js";
 import type * as emails_email from "../emails/email.js";
 import type * as emails_templates_AlertEmail from "../emails/templates/AlertEmail.js";
@@ -21,6 +23,8 @@ import type * as emails_templates_VerifyEmail from "../emails/templates/VerifyEm
 import type * as emails_templates_VerifyOTP from "../emails/templates/VerifyOTP.js";
 import type * as http from "../http.js";
 import type * as lib_logger from "../lib/logger.js";
+import type * as notifications_mutations from "../notifications/mutations.js";
+import type * as notifications_queries from "../notifications/queries.js";
 import type * as userPreferences_mutations from "../userPreferences/mutations.js";
 import type * as userPreferences_queries from "../userPreferences/queries.js";
 import type * as userPreferences_upload from "../userPreferences/upload.js";
@@ -35,6 +39,8 @@ declare const fullApi: ApiFromModules<{
   "auth/helpers": typeof auth_helpers;
   "auth/mutations": typeof auth_mutations;
   "auth/queries": typeof auth_queries;
+  "campaigns/mutations": typeof campaigns_mutations;
+  "campaigns/queries": typeof campaigns_queries;
   "emails/components/BaseEmail": typeof emails_components_BaseEmail;
   "emails/email": typeof emails_email;
   "emails/templates/AlertEmail": typeof emails_templates_AlertEmail;
@@ -45,6 +51,8 @@ declare const fullApi: ApiFromModules<{
   "emails/templates/VerifyOTP": typeof emails_templates_VerifyOTP;
   http: typeof http;
   "lib/logger": typeof lib_logger;
+  "notifications/mutations": typeof notifications_mutations;
+  "notifications/queries": typeof notifications_queries;
   "userPreferences/mutations": typeof userPreferences_mutations;
   "userPreferences/queries": typeof userPreferences_queries;
   "userPreferences/upload": typeof userPreferences_upload;

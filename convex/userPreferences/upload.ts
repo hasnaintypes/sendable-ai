@@ -30,9 +30,12 @@ export const saveProfileImage = mutation({
     if (existing) {
       await ctx.db.patch(existing._id, { profileImage: url });
     } else {
+      const now = Date.now();
       await ctx.db.insert("userPreferences", {
         userId: user._id,
         profileImage: url,
+        createdAt: now,
+        updatedAt: now,
       });
     }
 
