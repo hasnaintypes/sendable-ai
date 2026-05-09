@@ -31,7 +31,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         <ConvexClientProvider initialToken={token}>
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
+            defaultTheme="dark"
             enableSystem
             disableTransitionOnChange
           >
