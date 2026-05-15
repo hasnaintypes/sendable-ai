@@ -12,21 +12,17 @@ export const setDefault = mutation({
     const inbox = await ctx.db.get(args.id);
     if (!inbox || inbox.userId !== user._id) throw new Error("Not found");
 
-    // Clear default from all other inboxes first
-    const others = await ctx.db
+    const now = Date.now();
+    const all = await ctx.db
       .query("connectedInboxes")
-      .withIndex("userId_isDefault", (q) =>
-        q.eq("userId", user._id).eq("isDefault", true),
-      )
+      .withIndex("userId", (q) => q.eq("userId", user._id))
       .collect();
-
-    for (const other of others) {
-      if (other._id !== args.id) {
-        await ctx.db.patch(other._id, { isDefault: false, updatedAt: Date.now() });
-      }
+    for (const item of all) {
+      await ctx.db.patch(item._id, {
+        isDefault: item._id === args.id,
+        updatedAt: now,
+      });
     }
-
-    await ctx.db.patch(args.id, { isDefault: true, updatedAt: Date.now() });
   },
 });
 
@@ -44,11 +40,11 @@ export const update = mutation({
     if (!inbox || inbox.userId !== user._id) throw new Error("Not found");
 
     const { id, ...fields } = args;
-    const patch: Record<string, unknown> = { updatedAt: Date.now() };
-    if (fields.displayName !== undefined) patch.displayName = fields.displayName;
-    if (fields.permissionMode !== undefined) patch.permissionMode = fields.permissionMode;
-
-    await ctx.db.patch(id, patch);
+    await ctx.db.patch(id, {
+      ...(fields.displayName !== undefined && { displayName: fields.displayName }),
+      ...(fields.permissionMode !== undefined && { permissionMode: fields.permissionMode }),
+      updatedAt: Date.now(),
+    });
   },
 });
 
@@ -83,7 +79,20 @@ export const remove = mutation({
       );
     }
 
-    await ctx.db.patch(args.id, { status: "revoked", updatedAt: Date.now() });
+    const now = Date.now();
+    await ctx.db.patch(args.id, { status: "revoked", isDefault: false, updatedAt: now });
+
+    // If this was the default inbox, promote another active inbox
+    if (inbox.isDefault) {
+      const next = await ctx.db
+        .query("connectedInboxes")
+        .withIndex("userId", (q) => q.eq("userId", user._id))
+        .filter((q) =>
+          q.and(q.neq(q.field("_id"), args.id), q.neq(q.field("status"), "revoked")),
+        )
+        .first();
+      if (next) await ctx.db.patch(next._id, { isDefault: true, updatedAt: now });
+    }
   },
 });
 
@@ -155,6 +164,7 @@ export const storeGmailInbox = mutation({
     const existingInboxes = await ctx.db
       .query("connectedInboxes")
       .withIndex("userId", (q) => q.eq("userId", user._id))
+      .filter((q) => q.neq(q.field("status"), "revoked"))
       .collect();
     const isFirst = existingInboxes.length === 0;
 
