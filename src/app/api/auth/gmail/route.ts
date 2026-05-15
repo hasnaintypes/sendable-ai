@@ -16,7 +16,8 @@ export async function GET(request: NextRequest) {
   }
 
   const url = new URL(request.url);
-  const redirectUri = `${url.protocol}//${url.host}/api/auth/gmail/callback`;
+  const siteUrl = process.env.SITE_URL ?? `${url.protocol}//${url.host}`;
+  const redirectUri = `${siteUrl}/api/auth/gmail/callback`;
 
   const state = randomBytes(32).toString("hex");
 
@@ -32,7 +33,7 @@ export async function GET(request: NextRequest) {
   const response = NextResponse.redirect(authUrl.toString());
   response.cookies.set("gmail_oauth_state", state, {
     httpOnly: true,
-    secure: true,
+    secure: url.protocol === "https:",
     sameSite: "lax",
     maxAge: 600, // 10 minutes
     path: "/",
