@@ -1,13 +1,14 @@
 // sendable-web/src/app/api/auth/gmail/callback/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { createCipheriv, randomBytes } from "crypto";
+import { createCipheriv, randomBytes, timingSafeEqual } from "crypto";
 import { ConvexHttpClient } from "convex/browser";
 import { api } from "@/convex/_generated/api";
 import { getToken } from "@/lib/auth/server";
 
 function encryptValue(plaintext: string, keyBase64: string): string {
   const key = Buffer.from(keyBase64, "base64");
-  const iv = randomBytes(16);
+  if (key.length !== 32) throw new Error("ENCRYPTION_KEY must be 32 bytes (256 bits)");
+  const iv = randomBytes(12);
   const cipher = createCipheriv("aes-256-gcm", key, iv);
   const encrypted = Buffer.concat([
     cipher.update(plaintext, "utf8"),
@@ -35,11 +36,20 @@ export async function GET(request: NextRequest) {
 
   // Validate CSRF state
   const storedState = request.cookies.get("gmail_oauth_state")?.value;
-  if (!state || !storedState || state !== storedState) {
+  const stateMatch =
+    !!state &&
+    !!storedState &&
+    state.length === storedState.length &&
+    timingSafeEqual(Buffer.from(state), Buffer.from(storedState));
+  if (!stateMatch) {
     return NextResponse.redirect(`${settingsBase}&error=invalid_state`);
   }
 
   if (!code) {
+    return NextResponse.redirect(`${settingsBase}&error=connect_failed`);
+  }
+
+  if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET || !process.env.ENCRYPTION_KEY) {
     return NextResponse.redirect(`${settingsBase}&error=connect_failed`);
   }
 
