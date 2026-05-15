@@ -22,6 +22,8 @@ import type * as emails_templates_ResetPassword from "../emails/templates/ResetP
 import type * as emails_templates_VerifyEmail from "../emails/templates/VerifyEmail.js";
 import type * as emails_templates_VerifyOTP from "../emails/templates/VerifyOTP.js";
 import type * as http from "../http.js";
+import type * as inboxes_mutations from "../inboxes/mutations.js";
+import type * as inboxes_queries from "../inboxes/queries.js";
 import type * as lib_logger from "../lib/logger.js";
 import type * as notifications_mutations from "../notifications/mutations.js";
 import type * as notifications_queries from "../notifications/queries.js";
@@ -50,6 +52,8 @@ declare const fullApi: ApiFromModules<{
   "emails/templates/VerifyEmail": typeof emails_templates_VerifyEmail;
   "emails/templates/VerifyOTP": typeof emails_templates_VerifyOTP;
   http: typeof http;
+  "inboxes/mutations": typeof inboxes_mutations;
+  "inboxes/queries": typeof inboxes_queries;
   "lib/logger": typeof lib_logger;
   "notifications/mutations": typeof notifications_mutations;
   "notifications/queries": typeof notifications_queries;

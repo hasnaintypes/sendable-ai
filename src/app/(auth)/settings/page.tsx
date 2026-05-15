@@ -1,3 +1,4 @@
+// sendable-web/src/app/(auth)/settings/page.tsx
 "use client";
 
 import { ProfileSection } from "@/components/pages/(auth)/settings/ProfileSection";
@@ -9,8 +10,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { User, Bell, Plug, Shield } from "lucide-react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { useSearchParams } from "next/navigation";
 
-const tabs = [
+const VALID_TABS = ["profile", "notifications", "integrations", "security"] as const;
+type TabValue = (typeof VALID_TABS)[number];
+
+const tabs: { value: TabValue; label: string; icon: React.ElementType }[] = [
   { value: "profile", label: "Profile", icon: User },
   { value: "notifications", label: "Notifications", icon: Bell },
   { value: "integrations", label: "Integrations", icon: Plug },
@@ -48,20 +53,17 @@ function SettingsSkeleton() {
             <Skeleton className="h-10 w-full" />
           </div>
         </div>
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-24" />
-          <Skeleton className="h-10 w-full" />
-        </div>
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-28" />
-          <Skeleton className="h-10 w-full" />
-        </div>
       </div>
     </div>
   );
 }
 
 export default function SettingsPage() {
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get("tab");
+  const defaultTab: TabValue =
+    VALID_TABS.includes(tabParam as TabValue) ? (tabParam as TabValue) : "profile";
+
   return (
     <div className="flex flex-col w-full min-h-screen">
       <div className="px-6 pt-6 pb-2">
@@ -73,7 +75,7 @@ export default function SettingsPage() {
 
       <div className="flex-1 w-full px-6 py-4">
         <Tabs
-          defaultValue="profile"
+          defaultValue={defaultTab}
           orientation="vertical"
           className="flex gap-8"
         >
@@ -119,30 +121,18 @@ export default function SettingsPage() {
 function ProfileSectionWithSkeleton() {
   const user = useQuery(api.auth.queries.getCurrentUser);
   const preferences = useQuery(api.userPreferences.queries.get);
-
-  if (user === undefined || preferences === undefined) {
-    return <SettingsSkeleton />;
-  }
-
+  if (user === undefined || preferences === undefined) return <SettingsSkeleton />;
   return <ProfileSection />;
 }
 
 function NotificationSectionWithSkeleton() {
   const preferences = useQuery(api.userPreferences.queries.get);
-
-  if (preferences === undefined) {
-    return <SettingsSkeleton />;
-  }
-
+  if (preferences === undefined) return <SettingsSkeleton />;
   return <NotificationSection />;
 }
 
 function SecuritySectionWithSkeleton() {
   const user = useQuery(api.auth.queries.getCurrentUser);
-
-  if (user === undefined) {
-    return <SettingsSkeleton />;
-  }
-
+  if (user === undefined) return <SettingsSkeleton />;
   return <SecuritySection />;
 }
