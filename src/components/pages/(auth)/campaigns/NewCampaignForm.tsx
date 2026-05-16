@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { useQuery } from "convex/react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { ArrowLeft, ArrowRight, Check, Info, Rocket, X } from "lucide-react";
@@ -47,6 +49,7 @@ interface FormData {
   emailLimit: number;
   tone: Tone | "";
   permissionMode: PermissionMode | "";
+  connectedInboxId: string;
 }
 
 const INITIAL: FormData = {
@@ -63,6 +66,7 @@ const INITIAL: FormData = {
   emailLimit: 50,
   tone: "",
   permissionMode: "",
+  connectedInboxId: "",
 };
 
 // ─── Constants ──────────────────────────────────────────────────────────────
@@ -392,10 +396,14 @@ function Step2({
 function Step3({
   data,
   onChange,
+  activeInboxes,
 }: {
   data: FormData;
   onChange: (k: keyof FormData, v: string | number) => void;
+  activeInboxes: Array<{ _id: string; email: string; displayName?: string; isDefault: boolean }>;
 }) {
+  const hasInboxes = activeInboxes.length > 0;
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
@@ -427,6 +435,35 @@ function Step3({
           ))}
         </div>
       </div>
+
+      <Field
+        label="Sending inbox"
+        hint={hasInboxes ? "Select which connected account sends this campaign." : undefined}
+      >
+        {!hasInboxes ? (
+          <div className="flex items-center justify-between rounded-md border border-border/60 bg-muted/20 px-4 py-3">
+            <p className="text-sm text-muted-foreground">No Gmail account connected.</p>
+            <Link
+              href="/settings?tab=integrations"
+              className="text-sm text-primary hover:underline font-medium shrink-0"
+            >
+              Connect Gmail →
+            </Link>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-2">
+            {activeInboxes.map((inbox) => (
+              <Tile
+                key={inbox._id}
+                label={inbox.displayName || inbox.email}
+                sub={inbox.displayName ? inbox.email : inbox.isDefault ? "Default inbox" : "Connected"}
+                selected={data.connectedInboxId === inbox._id}
+                onClick={() => onChange("connectedInboxId", inbox._id)}
+              />
+            ))}
+          </div>
+        )}
+      </Field>
 
       <Field
         label="Prospect limit"
@@ -528,6 +565,19 @@ export function NewCampaignForm() {
   const [loading, setLoading] = useState(false);
   const createCampaign = useMutation(api.campaigns.mutations.create);
 
+  const inboxes = useQuery(api.inboxes.queries.list);
+  const activeInboxes = (inboxes ?? []).filter((i) => i.status === "active");
+
+  useEffect(() => {
+    if (!inboxes || data.connectedInboxId) return;
+    const active = inboxes.filter((i) => i.status === "active");
+    const defaultInbox = active.find((i) => i.isDefault) ?? active[0];
+    if (defaultInbox) {
+      setData((prev) => ({ ...prev, connectedInboxId: defaultInbox._id }));
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inboxes]); // only run when query data arrives, not on every data change
+
   function onChange(key: keyof FormData, value: string | number) {
     setData((prev) => ({ ...prev, [key]: value }));
   }
@@ -541,7 +591,7 @@ export function NewCampaignForm() {
         data.productInfo
       );
     if (step === 2)
-      return !!(data.tone && data.permissionMode && data.emailLimit > 0);
+      return !!(data.tone && data.permissionMode && data.emailLimit > 0 && data.connectedInboxId);
     return true;
   }
 
@@ -583,7 +633,7 @@ export function NewCampaignForm() {
         emailLimit: data.emailLimit,
         tone: data.tone as Tone,
         permissionMode: data.permissionMode as PermissionMode,
-        connectedInboxId: "placeholder",
+        connectedInboxId: data.connectedInboxId,
       });
       toast.success("Campaign created!");
       router.push("/dashboard");
@@ -697,7 +747,7 @@ export function NewCampaignForm() {
 
               {step === 0 && <Step1 data={data} onChange={onChange} />}
               {step === 1 && <Step2 data={data} onChange={onChange} />}
-              {step === 2 && <Step3 data={data} onChange={onChange} />}
+              {step === 2 && <Step3 data={data} onChange={onChange} activeInboxes={activeInboxes} />}
               {step === 3 && <Step4 data={data} />}
             </motion.div>
           </AnimatePresence>
