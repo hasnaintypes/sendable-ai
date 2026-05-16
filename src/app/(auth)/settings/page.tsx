@@ -1,6 +1,7 @@
 // sendable-web/src/app/(auth)/settings/page.tsx
 "use client";
 
+import type { ElementType } from "react";
 import { ProfileSection } from "@/components/pages/(auth)/settings/ProfileSection";
 import { NotificationSection } from "@/components/pages/(auth)/settings/NotificationSection";
 import { IntegrationSection } from "@/components/pages/(auth)/settings/IntegrationSection";
@@ -15,7 +16,7 @@ import { useSearchParams } from "next/navigation";
 const VALID_TABS = ["profile", "notifications", "integrations", "security"] as const;
 type TabValue = (typeof VALID_TABS)[number];
 
-const tabs: { value: TabValue; label: string; icon: React.ElementType }[] = [
+const tabs: { value: TabValue; label: string; icon: ElementType }[] = [
   { value: "profile", label: "Profile", icon: User },
   { value: "notifications", label: "Notifications", icon: Bell },
   { value: "integrations", label: "Integrations", icon: Plug },
