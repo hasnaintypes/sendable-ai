@@ -40,14 +40,6 @@ function PermissionBadge({ mode }: { mode: SafeInbox["permissionMode"] }) {
   return <Badge className="bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-500/20 hover:bg-blue-500/15">Drafts only</Badge>;
 }
 
-function GmailIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} fill="none">
-      <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.907 1.528-1.148C21.69 2.28 24 3.434 24 5.457z" fill="#EA4335"/>
-    </svg>
-  );
-}
-
 // Free plan: 1 inbox, Pro: 3, Growth: unlimited
 // TODO: derive from user.plan once billing is wired
 const MAX_GMAIL_INBOXES = 3;
@@ -153,7 +145,7 @@ export function IntegrationSection() {
           <CardContent className="p-5 space-y-4">
             <div className="flex items-start gap-3">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border bg-background">
-                <GmailIcon className="w-7 h-7" />
+                <Image src="/icons/google-gmail.svg" alt="Gmail" width={28} height={28} />
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2 mb-1">
@@ -194,7 +186,7 @@ export function IntegrationSection() {
                     key={inbox._id}
                     className="flex items-center gap-2 rounded-md border border-border/60 bg-muted/20 px-3 py-2"
                   >
-                    <GmailIcon className="w-4 h-4 shrink-0" />
+                    <Image src="/icons/google-gmail.svg" alt="Gmail" width={16} height={16} className="shrink-0" />
                     <div className="flex-1 min-w-0">
                       <p className="text-[12px] font-medium text-foreground truncate">
                         {inbox.displayName || inbox.email}
